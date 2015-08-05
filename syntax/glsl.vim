@@ -651,6 +651,16 @@ syntax region	glslError		start='^\s*#\s*error\>'
 "}}}
 
 " GLSL errors {{{
+"when wanted, highlight trailing white space
+if exists('glsl_space_errors')
+	if !exists('glsl_no_trail_space_error')
+		syntax match	glslSpaceError	display excludenl '\s\+$'
+	endif
+	if !exists("glsl_no_tab_space_error")
+		syntax match	glslSpaceError	display ' \+\t'me=e-1
+	endif
+endif
+
 syntax match glslReserved 'gl_\i*'
 " }}}
 
@@ -688,6 +698,7 @@ highlight default link glslQualFormat		Constant
 highlight default link glslQualifier		StorageClass
 highlight default link glslRepeat			Repeat
 highlight default link glslReserved			Error
+highlight default link glslSpaceError		Error
 highlight default link glslStatement		Statement
 highlight default link glslStructure		Structure
 highlight default link glslTodo				Todo
