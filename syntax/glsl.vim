@@ -661,7 +661,64 @@ if exists('glsl_space_errors')
 	endif
 endif
 
+" identifiers reserved for future use as built ins
 syntax match glslReserved 'gl_\i*'
+
+" This should be before cErrInParen to avoid problems with #define ({ xxx })
+"if exists('glsl_curly_error')
+"	syntax match	glslCurlyError '}'
+"	syntax region	glslBlock		start='{' end='}' contains=ALLBUT,glslBadBlock,glslCurlyError,@glslParenGroup,glslErrInParen,glslCppParen,glslErrInBracket,glslCppBracket,@glslStringGroup,@Spell fold
+"else
+"	syntax region	glslBlock		start='{' end='}' transparent fold
+"endif
+
+" Catch errors caused by wrong parenthesis and brackets.
+"syntax cluster glslParenGroup contains=glslParenError,glslIncluded,glslSpecial,glslCommentSkip,glslCommentString,glslComment2String,@glslCommentGroup,glslCommentStartError,glslUserLabel,glslBitField,glslOctalZero,@glslCppOutInGroup,glslFormat,glslNumber,glslFloat,glslOctal,glslOctalError,glslNumbersCom
+"if exists('glsl_no_curly_error')
+"	if s:ft ==# 'cpp' && !exists('cpp_no_cpp11')
+"		syntax region	glslParen		transparent start='(' end=')' contains=ALLBUT,@glslParenGroup,glslCppParen,@glslStringGroup,@Spell
+"		" glslCppParen: same as glslParen but ends at end-of-line; used in glslDefine
+"		syntax region	glslCppParen	transparent start='(' skip='\\$' excludenl end=')' end='$' contained contains=ALLBUT,@glslParenGroup,glslParen,glslString,@Spell
+"		syntax match	glslParenError	display ')'
+"	else
+"		syntax region	glslParen		transparent start='(' end=')' end='}'me=s-1 contains=ALLBUT,glslBlock,@glslParenGroup,glslCppParen,@glslStringGroup,@Spell
+"		" glslCppParen: same as glslParen but ends at end-of-line; used in glslDefine
+"		syntax region	glslCppParen	transparent start='(' skip='\\$' excludenl end=')' end='$' contained contains=ALLBUT,@glslParenGroup,glslParen,glslString,@Spell
+"		syntax match	glslParenError	display ')'
+"		syntax match	glslErrInParen	display contained '^[{}]'
+"	endif
+"elseif exists('glsl_no_bracket_error')
+"	if s:ft ==# 'cpp' && !exists('cpp_no_cpp11')
+"		syntax region	glslParen		transparent start='(' end=')' contains=ALLBUT,@glslParenGroup,glslCppParen,@glslStringGroup,@Spell
+"		" glslCppParen: same as glslParen but ends at end-of-line; used in glslDefine
+"		syntax region	glslCppParen	transparent start='(' skip='\\$' excludenl end=')' end='$' contained contains=ALLBUT,@glslParenGroup,glslParen,glslString,@Spell
+"		syntax match	glslParenError	display ')'
+"	else
+"		syntax region	glslParen		transparent start='(' end=')' end='}'me=s-1 contains=ALLBUT,glslBlock,@glslParenGroup,glslCppParen,@glslStringGroup,@Spell
+"		" glslCppParen: same as glslParen but ends at end-of-line; used in glslDefine
+"		syntax region	glslCppParen	transparent start='(' skip='\\$' excludenl end=')' end='$' contained contains=ALLBUT,@glslParenGroup,glslParen,glslString,@Spell
+"		syntax match	glslParenError	display ')'
+"		syntax match	glslErrInParen	display contained '[{}]'
+"	endif
+"else
+"	if s:ft ==# 'cpp' && !exists('cpp_no_cpp11')
+"		syntax region	glslParen		transparent start='(' end=')' contains=ALLBUT,@glslParenGroup,glslCppParen,glslErrInBracket,glslCppBracket,@glslStringGroup,@Spell
+"		" glslCppParen: same as glslParen but ends at end-of-line; used in glslDefine
+"		syntax region	glslCppParen	transparent start='(' skip='\\$' excludenl end=')' end='$' contained contains=ALLBUT,@glslParenGroup,glslErrInBracket,glslParen,glslBracket,glslString,@Spell
+"		syntax match	glslParenError	display '[\])]'
+"		syntax region	glslBracket	transparent start='\[' end=']' contains=ALLBUT,@glslParenGroup,glslErrInParen,glslCppParen,glslCppBracket,@glslStringGroup,@Spell
+"	else
+"		syntax region	glslParen		transparent start='(' end=')' end='}'me=s-1 contains=ALLBUT,glslBlock,@glslParenGroup,glslCppParen,glslErrInBracket,glslCppBracket,@glslStringGroup,@Spell
+"		" glslCppParen: same as glslParen but ends at end-of-line; used in glslDefine
+"		syntax region	glslCppParen	transparent start='(' skip='\\$' excludenl end=')' end='$' contained contains=ALLBUT,@glslParenGroup,glslErrInBracket,glslParen,glslBracket,glslString,@Spell
+"		syntax match	glslParenError	display '[\])]'
+"		syntax match	glslErrInParen	display contained '[\]{}]'
+"		syntax region	glslBracket	transparent start='\[' end=']' end='}'me=s-1 contains=ALLBUT,glslBlock,@glslParenGroup,glslErrInParen,glslCppParen,glslCppBracket,@glslStringGroup,@Spell
+"	endif
+"	" glslCppBracket: same as glslParen but ends at end-of-line; used in glslDefine
+"	syntax region	glslCppBracket	transparent start='\[' skip='\\$' excludenl end=']' end='$' contained contains=ALLBUT,@glslParenGroup,glslErrInParen,glslParen,glslBracket,glslString,@Spell
+"	syntax match	glslErrInBracket	display contained '[);{}]'
+"endif
 " }}}
 
 " Define the default highlighting. {{{
