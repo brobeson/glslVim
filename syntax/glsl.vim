@@ -40,9 +40,9 @@ syntax case match
 "}}}
 
 " GLSL comments {{{
-syntax keyword	glslTodo			TODO FIXME XXX HACK BUG			contained
-syntax region	glslComment			start='//'  skip='\\$' end='$'	keepend contains=glslTodo
-syntax region	glslComment			start='/\*'            end='\*/'
+syntax keyword	glslTodo	TODO FIXME XXX HACK BUG				contained
+syntax region	glslComment	start='//'  skip='\\$' end='$'		display keepend contains=glslTodo
+syntax region	glslComment	start='/\*'            end='\*/'	display
 "}}}
 
 " GLSL built in constants {{{
