@@ -32,3 +32,6 @@ Here is a summary of the functionality included in the plugin.
 Basic syntax highlighting is provided. Most of it is analogous to C and C++
 highlighting.
 
+#### Automatic Indentation
+GLSL uses the same automatic indentation as C.
+
