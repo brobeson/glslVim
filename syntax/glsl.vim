@@ -664,7 +664,6 @@ highlight default link glslComment			Comment
 highlight default link glslComponent		Special
 highlight default link glslConditional		Conditional
 highlight default link glslConstant			Constant
-highlight default link glslCurlyError		Error
 highlight default link glslDecimal			Number
 highlight default link glslDefine			PreProc
 highlight default link glslError			PreProc
