@@ -8,37 +8,32 @@ if exists('b:current_syntax')
     finish
 endif
 
-
 " GLSL numbers {{{
-" ignore case for the type suffixes: f and F are both ok.
+" ignore case for the type suffixes
 syntax case ignore
 
 "integer number, or floating point number without a dot and with 'f'.
-syntax match	glslNumbers		display transparent '\<\d\|\.\d' contains=glslNumber,glslFloat,glslOctalError,glslOctal
+syntax match	glslNumbers		'\<\d\|\.\d'	display transparent contains=glslHex,glslDecimal,glslFloat,glslOctalError,glslOctal
 
-" Same, but without octal error (for comments)
-syntax match	glslNumber		display contained '\d\+u\?\>'
+" octal, decimal, and hexadecimal integers
+syntax match	glslDecimal		'\d\+u\?\>'				display contained
+syntax match	glslOctal		'\<0\o\+u\?\>'			display contained contains=glslOctalZero,glslOctalError
+syntax match	glslOctalZero	'\<0'					display contained
+syntax match	glslOctalError	'\<0\o*[89]\+\o*u\?'	display contained
+syntax match	glslHexZero		'0x'					display contained
+syntax match	glslHex			'0x\x\+u\?\>'			display contained contains=glslHexZero
 
-"hex number
-syntax match	glslHexZero		display contained '0x'
-syntax match	glslNumber		display contained '0x\x\+u\?\>' contains=glslHexZero
-
-" Flag the first zero of an octal number as something special
-syntax match	glslOctal		display contained '0\o\+u\?\>' contains=glslOctalZero
-syntax match	glslOctalZero	display contained '\<0'
-syntax match	glslFloat		display contained '\d\+l\?f'
+" floating point numbers
+syntax match	glslFloat		'\d\+l\?f'								display contained
 
 "floating point number, with dot, optional exponent
-syntax match	glslFloat		display contained '\d\+\.\d*\(e[-+]\?\d\+\)\?\(f\|lf\)\?'
+syntax match	glslFloat		'\d\+\.\d*\(e[-+]\?\d\+\)\?\(f\|lf\)\?'	display contained
 
 "floating point number, starting with a dot, optional exponent
-syntax match	glslFloat		display contained '\.\d\+\(e[-+]\?\d\+\)\?\(f\|lf\)\?\>'
+syntax match	glslFloat		'\.\d\+\(e[-+]\?\d\+\)\?\(f\|lf\)\?\>'	display contained
 
 "floating point number, without dot, with exponent
-syntax match	glslFloat		display contained '\d\+e[-+]\?\d\+\(f\|lf\)\?\>'
-
-" flag an octal number with wrong digits
-syntax match	glslOctalError	display contained '0\o*[89]\d*'
+syntax match	glslFloat		'\d\+e[-+]\?\d\+\(f\|lf\)\?\>'			display contained
 
 " restore case sensitivity
 syntax case match
@@ -642,7 +637,7 @@ syntax region	glslVersion	start='^\s*#\s*version\>\s*\d\d\d\>'
 syntax region	glslLine	start='^\s*#\s*line\>'
 					\		skip='\\$'
 					\		end='$'
-					\		keepend contains=glslNumber
+					\		keepend contains=glslDecimal
 syntax match	glslErrorString	'".*"' contained
 syntax region	glslError		start='^\s*#\s*error\>'
 						\		skip='\\$'
@@ -651,74 +646,16 @@ syntax region	glslError		start='^\s*#\s*error\>'
 "}}}
 
 " GLSL errors {{{
-"when wanted, highlight trailing white space
-if exists('glsl_space_errors')
-	if !exists('glsl_no_trail_space_error')
-		syntax match	glslSpaceError	display excludenl '\s\+$'
-	endif
-	if !exists("glsl_no_tab_space_error")
-		syntax match	glslSpaceError	display ' \+\t'me=e-1
-	endif
+"when wanted, highlight white space errors
+if exists('glsl_trail_space_error')
+	syntax match glslSpaceError	display excludenl '\s\+$'
+endif
+if exists("glsl_tab_space_error")
+	syntax match glslSpaceError	display ' \+\t'me=e-1
 endif
 
 " identifiers reserved for future use as built ins
 syntax match glslReserved 'gl_\i*'
-
-" This should be before cErrInParen to avoid problems with #define ({ xxx })
-"if exists('glsl_curly_error')
-"	syntax match	glslCurlyError '}'
-"	syntax region	glslBlock		start='{' end='}' contains=ALLBUT,glslBadBlock,glslCurlyError,@glslParenGroup,glslErrInParen,glslCppParen,glslErrInBracket,glslCppBracket,@glslStringGroup,@Spell fold
-"else
-"	syntax region	glslBlock		start='{' end='}' transparent fold
-"endif
-
-" Catch errors caused by wrong parenthesis and brackets.
-"syntax cluster glslParenGroup contains=glslParenError,glslIncluded,glslSpecial,glslCommentSkip,glslCommentString,glslComment2String,@glslCommentGroup,glslCommentStartError,glslUserLabel,glslBitField,glslOctalZero,@glslCppOutInGroup,glslFormat,glslNumber,glslFloat,glslOctal,glslOctalError,glslNumbersCom
-"if exists('glsl_no_curly_error')
-"	if s:ft ==# 'cpp' && !exists('cpp_no_cpp11')
-"		syntax region	glslParen		transparent start='(' end=')' contains=ALLBUT,@glslParenGroup,glslCppParen,@glslStringGroup,@Spell
-"		" glslCppParen: same as glslParen but ends at end-of-line; used in glslDefine
-"		syntax region	glslCppParen	transparent start='(' skip='\\$' excludenl end=')' end='$' contained contains=ALLBUT,@glslParenGroup,glslParen,glslString,@Spell
-"		syntax match	glslParenError	display ')'
-"	else
-"		syntax region	glslParen		transparent start='(' end=')' end='}'me=s-1 contains=ALLBUT,glslBlock,@glslParenGroup,glslCppParen,@glslStringGroup,@Spell
-"		" glslCppParen: same as glslParen but ends at end-of-line; used in glslDefine
-"		syntax region	glslCppParen	transparent start='(' skip='\\$' excludenl end=')' end='$' contained contains=ALLBUT,@glslParenGroup,glslParen,glslString,@Spell
-"		syntax match	glslParenError	display ')'
-"		syntax match	glslErrInParen	display contained '^[{}]'
-"	endif
-"elseif exists('glsl_no_bracket_error')
-"	if s:ft ==# 'cpp' && !exists('cpp_no_cpp11')
-"		syntax region	glslParen		transparent start='(' end=')' contains=ALLBUT,@glslParenGroup,glslCppParen,@glslStringGroup,@Spell
-"		" glslCppParen: same as glslParen but ends at end-of-line; used in glslDefine
-"		syntax region	glslCppParen	transparent start='(' skip='\\$' excludenl end=')' end='$' contained contains=ALLBUT,@glslParenGroup,glslParen,glslString,@Spell
-"		syntax match	glslParenError	display ')'
-"	else
-"		syntax region	glslParen		transparent start='(' end=')' end='}'me=s-1 contains=ALLBUT,glslBlock,@glslParenGroup,glslCppParen,@glslStringGroup,@Spell
-"		" glslCppParen: same as glslParen but ends at end-of-line; used in glslDefine
-"		syntax region	glslCppParen	transparent start='(' skip='\\$' excludenl end=')' end='$' contained contains=ALLBUT,@glslParenGroup,glslParen,glslString,@Spell
-"		syntax match	glslParenError	display ')'
-"		syntax match	glslErrInParen	display contained '[{}]'
-"	endif
-"else
-"	if s:ft ==# 'cpp' && !exists('cpp_no_cpp11')
-"		syntax region	glslParen		transparent start='(' end=')' contains=ALLBUT,@glslParenGroup,glslCppParen,glslErrInBracket,glslCppBracket,@glslStringGroup,@Spell
-"		" glslCppParen: same as glslParen but ends at end-of-line; used in glslDefine
-"		syntax region	glslCppParen	transparent start='(' skip='\\$' excludenl end=')' end='$' contained contains=ALLBUT,@glslParenGroup,glslErrInBracket,glslParen,glslBracket,glslString,@Spell
-"		syntax match	glslParenError	display '[\])]'
-"		syntax region	glslBracket	transparent start='\[' end=']' contains=ALLBUT,@glslParenGroup,glslErrInParen,glslCppParen,glslCppBracket,@glslStringGroup,@Spell
-"	else
-"		syntax region	glslParen		transparent start='(' end=')' end='}'me=s-1 contains=ALLBUT,glslBlock,@glslParenGroup,glslCppParen,glslErrInBracket,glslCppBracket,@glslStringGroup,@Spell
-"		" glslCppParen: same as glslParen but ends at end-of-line; used in glslDefine
-"		syntax region	glslCppParen	transparent start='(' skip='\\$' excludenl end=')' end='$' contained contains=ALLBUT,@glslParenGroup,glslErrInBracket,glslParen,glslBracket,glslString,@Spell
-"		syntax match	glslParenError	display '[\])]'
-"		syntax match	glslErrInParen	display contained '[\]{}]'
-"		syntax region	glslBracket	transparent start='\[' end=']' end='}'me=s-1 contains=ALLBUT,glslBlock,@glslParenGroup,glslErrInParen,glslCppParen,glslCppBracket,@glslStringGroup,@Spell
-"	endif
-"	" glslCppBracket: same as glslParen but ends at end-of-line; used in glslDefine
-"	syntax region	glslCppBracket	transparent start='\[' skip='\\$' excludenl end=']' end='$' contained contains=ALLBUT,@glslParenGroup,glslErrInParen,glslParen,glslBracket,glslString,@Spell
-"	syntax match	glslErrInBracket	display contained '[);{}]'
-"endif
 " }}}
 
 " Define the default highlighting. {{{
@@ -727,6 +664,8 @@ highlight default link glslComment			Comment
 highlight default link glslComponent		Special
 highlight default link glslConditional		Conditional
 highlight default link glslConstant			Constant
+highlight default link glslCurlyError		Error
+highlight default link glslDecimal			Number
 highlight default link glslDefine			PreProc
 highlight default link glslError			PreProc
 highlight default link glslErrorString		String
@@ -735,13 +674,13 @@ highlight default link glslExtBehavior		Constant
 highlight default link glslExtension		PreProc
 highlight default link glslFloat			Number
 highlight default link glslFunction			Identifier
+highlight default link glslHex				Number
 highlight default link glslHexZero			PreProc
 highlight default link glslLabel			Label
 highlight default link glslLayout			Keyword
 highlight default link glslLine				PreProc
 highlight default link glslMacro			Macro
 highlight default link glslMixedComps		Error
-highlight default link glslNumber			Number
 highlight default link glslOctal			Number
 highlight default link glslOctalError		Error
 highlight default link glslOctalZero		PreProc
