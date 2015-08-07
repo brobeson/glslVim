@@ -648,14 +648,14 @@ syntax region	glslError		start='^\s*#\s*error\>'
 " GLSL errors {{{
 "when wanted, highlight white space errors
 if exists('glsl_trail_space_error')
-	syntax match glslSpaceError	display excludenl '\s\+$'
+	syntax match glslSpaceError	excludenl '\s\+$' display
 endif
 if exists("glsl_tab_space_error")
-	syntax match glslSpaceError	display ' \+\t'me=e-1
+	syntax match glslSpaceError ' \+\t'me=e-1 display
 endif
 
 " identifiers reserved for future use as built ins
-syntax match glslReserved 'gl_\i*'
+syntax match glslReserved 'gl_\i*' display
 " }}}
 
 " Define the default highlighting. {{{
