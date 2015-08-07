@@ -603,46 +603,46 @@ syntax keyword	glslMacro	__LINE__
 						\	GL_es_profile
 
 " macro definition
-syntax match	glslDefine	'^\s*#\s*\(define\|undef\)\>'
+syntax match	glslDefine	'^\s*#\s*\(define\|undef\)\>' display
 
 " preprocessor conditionals
 syntax region	glslPrecondition	start='^\s*#\s*\(if\|ifdef\|ifndef\|elif\)\>'
 							\		skip='\\$'
 							\		end='$'
-							\		keepend contains=glslComment,glslNumbers
+							\		display keepend contains=glslComment,glslNumbers
 syntax match	glslPrecondition	'^\s*#\s*\(else\|endif\)\>'
 
 " pragmas
-syntax keyword	glslPragmaOptions	optimize debug STDGL	contained
-syntax match	glslPragmaValues	'(\s*\zs\(all\|off\|on\)\ze\s*)'
+syntax keyword	glslPragmaOptions	optimize debug STDGL				contained
+syntax match	glslPragmaValues	'(\s*\zs\(all\|off\|on\)\ze\s*)'	display
 syntax region	glslPragma			start='^\s*#\s*pragma\>'
 						\			skip='\\$'
 						\			end='$'
-						\			keepend contains=glslPragmaValues,glslPragmaOptions,glslQualifier
+						\			display keepend contains=glslPragmaValues,glslPragmaOptions,glslQualifier
 
 " extensions
 syntax keyword	glslExtBehavior	disable enable require warn contained
-syntax match	glslExtAll		'\s\+\zsall\ze\s*:'			contained
+syntax match	glslExtAll		'\s\+\zsall\ze\s*:'			contained display
 syntax match	glslExtension	'^\s*#\s*extension\s\+\i\+\s*:\s*\(disable\|enable\|require\|warn\)'
-							\	contains=glslExtAll,glslExtBehavior
+							\	display contains=glslExtAll,glslExtBehavior
 
 " versioning
 syntax keyword	glslProfile	core compatibility es
 syntax region	glslVersion	start='^\s*#\s*version\>\s*\d\d\d\>'
 						\	skip='\\$'
 						\	end='$'
-						\	keepend contains=glslProfile,glslNumbers
+						\	display keepend contains=glslProfile,glslNumbers
 
 " diagnostics
-syntax region	glslLine	start='^\s*#\s*line\>'
-					\		skip='\\$'
-					\		end='$'
-					\		keepend contains=glslDecimal
-syntax match	glslErrorString	'".*"' contained
+syntax region	glslLine		start='^\s*#\s*line\>'
+					\			skip='\\$'
+					\			end='$'
+					\			display keepend contains=glslDecimal
+syntax match	glslErrorString	'".*"' contained display
 syntax region	glslError		start='^\s*#\s*error\>'
 						\		skip='\\$'
 						\		end='$'
-						\		keepend contains=glslErrorString
+						\		display keepend contains=glslErrorString
 "}}}
 
 " GLSL errors {{{
