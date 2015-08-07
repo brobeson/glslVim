@@ -35,3 +35,6 @@ highlighting.
 #### Automatic Indentation
 GLSL uses the same automatic indentation as C.
 
+#### Filetype Plugin
+A filetype plugin provides most of the same functionality as the C filetype plugin.
+
