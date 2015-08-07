@@ -570,27 +570,28 @@ syntax keyword	glslQualFormat	r11f_g11f_b10f
 
 " GLSL vector components {{{
 " use ms=s+1 to not highlight the period
-syntax match   glslComponent   '\.[xyzw]\+\>'ms=s+1 display
-syntax match   glslComponent   '\.[rgba]\+\>'ms=s+1 display
-syntax match   glslComponent   '\.[stpq]\+\>'ms=s+1 display
+syntax match glslComponent '\.[xyzw]\+\>'ms=s+1 display
+syntax match glslComponent '\.[rgba]\+\>'ms=s+1 display
+syntax match glslComponent '\.[stpq]\+\>'ms=s+1 display
 
-" avoid mixing spacial components with color and texture
-"
-" it is erroneous to mix components from different conceptual
-" types. now, it is feasible that some permutation of these
-" letters could be used for a struct field. if such occurs in
-" your shaders, you should link glslMixedComps to something
-" other than Error.
-syntax match	glslMixedComps	'\.[rgbastpq]\+[xyzw]\+[rgbastpq]*'ms=s+1 display
-syntax match	glslMixedComps	'\.[rgbastpq]*[xyzw]\+[rgbastpq]\+'ms=s+1 display
+" avoid mixing spatial components with color and texture
+if exists('glsl_mixed_comps_error') || exists('glsl_enable_the_world')
+	" it is erroneous to mix components from different conceptual
+	" types. now, it is feasible that some permutation of these
+	" letters could be used for a struct field. if such occurs in
+	" your shaders, you should link glslMixedComps to something
+	" other than Error.
+	syntax match glslMixedComps '\.[rgbastpq]\+[xyzw]\+[rgbastpq]*'ms=s+1 display
+	syntax match glslMixedComps '\.[rgbastpq]*[xyzw]\+[rgbastpq]\+'ms=s+1 display
 
-" avoid mixing color with spacial and texture
-syntax match	glslMixedComps	'\.[xyzwstpq]\+[rgba]\+[xyzwstpq]*'ms=s+1 display
-syntax match	glslMixedComps	'\.[xyzwstpq]*[rgba]\+[xyzwstpq]\+'ms=s+1 display
+	" avoid mixing color with spacial and texture
+	syntax match glslMixedComps '\.[xyzwstpq]\+[rgba]\+[xyzwstpq]*'ms=s+1 display
+	syntax match glslMixedComps '\.[xyzwstpq]*[rgba]\+[xyzwstpq]\+'ms=s+1 display
 
-" avoid mixing texture with spacial and color
-syntax match	glslMixedComps	'\.[xyzwrgba]\+[stpq]\+[xyzwrgba]*'ms=s+1 display
-syntax match	glslMixedComps	'\.[xyzwrgba]*[stpq]\+[xyzwrgba]\+'ms=s+1 display
+	" avoid mixing texture with spacial and color
+	syntax match glslMixedComps '\.[xyzwrgba]\+[stpq]\+[xyzwrgba]*'ms=s+1 display
+	syntax match glslMixedComps '\.[xyzwrgba]*[stpq]\+[xyzwrgba]\+'ms=s+1 display
+endif
 "}}}
 
 " GLSL preprocessor {{{
@@ -647,10 +648,10 @@ syntax region	glslError		start='^\s*#\s*error\>'
 
 " GLSL errors {{{
 "when wanted, highlight white space errors
-if exists('glsl_trail_space_error')
+if exists('glsl_trail_space_error') || exists('glsl_enable_the_world')
 	syntax match glslSpaceError	excludenl '\s\+$' display
 endif
-if exists("glsl_tab_space_error")
+if exists("glsl_tab_space_error") || exists('glsl_enable_the_world')
 	syntax match glslSpaceError ' \+\t'me=e-1 display
 endif
 
