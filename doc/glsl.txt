@@ -211,6 +211,9 @@ The filetype plugin for GLSL sets format options identical to C. That is, it
 
 The plugin also sets up formatting of dashed lists in comments.
 
+The code fold method is set to syntax. All other code folding options are left
+as their default values.
+
 Finally, the plugin sets the file browse dialog to filter on .glsl files.
 
 vim:tw=78:ts=8:ft=help:norl:

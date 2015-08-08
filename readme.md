@@ -38,3 +38,12 @@ GLSL uses the same automatic indentation as C.
 #### Filetype Plugin
 A filetype plugin provides most of the same functionality as the C filetype plugin.
 
+- Removes text wrapping in general,
+- Adds text wrapping for comments,
+- Adds autoinsertion of the comment leader after hitting <Enter> in insert mode, or 'o' or 'O' in normal mode,
+- Adds formatting of comments with the 'gq' command,
+- Adds not breaking long lines in insert mode.
+- Sets up formatting of dashed lists in comments.
+- Set the code fold method to syntax.
+- Adds a filter of ".glsl" files to the file browswer.
+
