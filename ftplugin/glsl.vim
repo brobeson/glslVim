@@ -15,9 +15,9 @@ let b:did_ftplugin = 1
 let s:cpo_save = &cpo
 set cpo-=C
 
-" TODO	add the undor for ofu after autoloading functions are added to glsl
-"let b:undo_ftplugin = 'setl fo< com< ofu< | endif'
-let b:undo_ftplugin = 'setl fo< com< | endif'
+" TODO	add the undo for ofu after autoloading functions are added to glsl
+"let b:undo_ftplugin = 'setl fo< com< ofu<'
+let b:undo_ftplugin = 'setl formatoptions< comments< foldmethod<'
 
 " Set 'formatoptions' to break comment lines but not other lines,
 " and insert the comment leader when hitting <CR> or using 'o'.
@@ -35,6 +35,9 @@ setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
 " braces in comments.
 let b:match_words = &matchpairs . ',^\s*#\s*if\(\|def\|ndef\)\>:^\s*#\s*elif\>:^\s*#\s*else\>:^\s*#\s*endif\>'
 let b:match_skip = 's:comment\|string\|character'
+
+" set up code folding
+setlocal foldmethod=syntax
 
 " files in the browse dialog
 if (has('gui_win32') || has('gui_gtk')) && !exists('b:browsefilter')
