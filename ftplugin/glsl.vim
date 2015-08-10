@@ -24,9 +24,9 @@ let b:undo_ftplugin = 'setl formatoptions< comments< foldmethod<'
 setlocal formatoptions-=t formatoptions+=croql
 
 " Set completion with CTRL-X CTRL-O to autoloaded function.
-"if exists('&ofu')
-"	setlocal ofu=glslcomplete#Complete
-"endif
+if exists('&ofu')
+	setlocal ofu=glslcomplete#Complete
+endif
 
 " Set 'comments' to format dashed lists in comments.
 setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
