@@ -6,6 +6,17 @@
 let s:cpo_save = &cpo
 set cpo&vim
 
+" GLSL built ins {{{
+let s:glsl_builtins =[
+	\ { 'word': '__FILE__', 'abbr': '__FILE__', 'info': 'Integer representing the current source string.', 'kind': 'd' },
+	\ { 'word': '__LINE__', 'abbr': '__LINE__', 'info': 'The line number where the macro is used.', 'kind': 'd' },
+	\ { 'word': '__VERSION__', 'abbr': '__VERSION__', 'info': 'Integer representing the GLSL version used.', 'kind': 'd' },
+	\ { 'word': 'GL_compatibility_profile', 'abbr': 'GL_compatibility_profile', 'info': 'Defined as 1 if the shader profile was set to "compatibility"', 'kind': 'd' },
+	\ { 'word': 'GL_core_profile', 'abbr': 'GL_core_profile', 'info': 'Defined as 1 if the shader profile was set to "core".', 'kind': 'd' },
+	\ { 'word': 'GL_es_profile', 'abbr': 'GL_es_profile', 'info': 'Defined as 1 if the shader profile was set "es".', 'kind': 'd' }
+	\ ]
+" }}}
+
 " GLSL built in constants {{{
 let s:constants =	[	"gl_MaxAtomicCounterBindings",
 					\	"gl_MaxAtomicCounterBufferSize",
@@ -282,13 +293,6 @@ let s:variables =	[	"gl_ClipDistance",
 					\	"gl_WorkGroupSize" ]
 "}}}
 
-let s:macros =	[	"__LINE__",
-				\	"__FILE__",
-				\	"__VERSION__",
-				\	"GL_compatibility_profile",
-				\	"GL_core_profile",
-				\	"GL_es_profile" ]
-
 " This function is used for the 'omnifunc' option.
 function! glslcomplete#Complete(findstart, base)
 	if a:findstart
@@ -311,24 +315,24 @@ function! glslcomplete#Complete(findstart, base)
 
 	let base_pattern = '^' . a:base
 	let matches = []
+	for builtin in s:glsl_builtins
+		if builtin['abbr'] =~ base_pattern
+			call add(matches, builtin)
+		endif
+	endfor
 	for variable in s:variables
 		if variable =~ base_pattern
 			call add(matches, variable)
 		endif
 	endfor
-	for builtin in s:functions
-		if builtin =~ base_pattern
-			call add(matches, builtin)
+	for builtinf in s:functions
+		if builtinf =~ base_pattern
+			call add(matches, builtinf)
 		endif
 	endfor
 	for constant in s:constants
 		if constant =~ base_pattern
 			call add(matches, constant)
-		endif
-	endfor
-	for macro in s:macros
-		if macro =~ base_pattern
-			call add(matches, macro)
 		endif
 	endfor
 
