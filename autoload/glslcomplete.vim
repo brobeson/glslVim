@@ -12,43 +12,112 @@ let s:glsl_builtins = [
 	\ { 'kind': 'd', 'word': '__FILE__',                 'abbr': '__FILE__',                 'info': 'Integer representing the current source string.' },
 	\ { 'kind': 'd', 'word': '__LINE__',                 'abbr': '__LINE__',                 'info': 'The line number where the macro is used.' },
 	\ { 'kind': 'd', 'word': '__VERSION__',              'abbr': '__VERSION__',              'info': 'Integer representing the GLSL version used.' },
-	\ { 'kind': 'v', 'word': 'gl_ClipDistance',          'abbr': 'gl_ClipDistance',          'info': "Vertex shader output: the distance from the vertex to each clipping half-space.\nTessallation control shader input/output: the distance from the vertex to each clipping half-space.\nTessallation evaluation shader input/output: the distance from the vertex to each clipping half-space.\nGeometry shader input/output: the distance from the vertex to each clipping half-space.\nFragment shader input: the interpolated clipping plane half-spaces." },
+	\ { 'kind': 'v', 'word': 'gl_ClipDistance',          'abbr': 'gl_ClipDistance',          'info': "in  float gl_ClipDistance[];\n
+																									 \out float gl_ClipDistance[];\n
+																									 \    // Vertex output: the distance from the vertex to each clipping half-space.\n
+																									 \    // Tessallation control input/output: the distance from the vertex to each clipping half-space.\n
+																									 \    // Tessallation evaluation input/output: the distance from the vertex to each clipping half-space.\n
+																									 \    // Geometry input/output: the distance from the vertex to each clipping half-space.\n
+																									 \    // Fragment input: the interpolated clipping plane half-spaces." },
 	\ { 'kind': 'd', 'word': 'GL_compatibility_profile', 'abbr': 'GL_compatibility_profile', 'info': 'Defined as 1 if the shader profile was set to "compatibility"' },
 	\ { 'kind': 'd', 'word': 'GL_core_profile',          'abbr': 'GL_core_profile',          'info': 'Defined as 1 if the shader profile was set to "core".' },
-	\ { 'kind': 'v', 'word': 'gl_CullDistance',          'abbr': 'gl_CullDistance',          'info': "no documentation available" },
+	\ { 'kind': 'v', 'word': 'gl_CullDistance',          'abbr': 'gl_CullDistance',          'info': "in  float gl_CullDistance[];\n
+																									 \out float gl_CullDistance[];\n
+																									 \    // no documentation available" },
 	\ { 'kind': 'd', 'word': 'GL_es_profile',            'abbr': 'GL_es_profile',            'info': 'Defined as 1 if the shader profile was set "es".' },
-	\ { 'kind': 'v', 'word': 'gl_FragCoord',             'abbr': 'gl_FragCoord',             'info': "Fragment shader input: The fragment's location in window space." },
-	\ { 'kind': 'v', 'word': 'gl_FragDepth',             'abbr': 'gl_FragDepth',             'info': "Fragment shader output: The depth of the fragment." },
-	\ { 'kind': 'v', 'word': 'gl_FrontFacing',           'abbr': 'gl_FrontFacing',           'info': "Fragment shader input: True if the fragment is front facing, false if it is back facing." },
-	\ { 'kind': 'v', 'word': 'gl_GlobalInvocationID',    'abbr': 'gl_GlobalInvocationID',    'info': "Compute shader input: The unique ID for an invocation of a compute shader, with a work group." },
-	\ { 'kind': 'v', 'word': 'gl_HelperInvocation',      'abbr': 'gl_HelperInvocation',      'info': "no documentation available" },
-	\ { 'kind': 'v', 'word': 'gl_in',                    'abbr': 'gl_in',                    'info': "Tessallation control shader input: The instance of gl_PerVertex.\nTessallation evaluation shader input: The instance of gl_PerVertex.\nGeometry shader input: The instance if gl_PerVertex." },
-	\ { 'kind': 'v', 'word': 'gl_InstanceID',            'abbr': 'gl_InstanceID',            'info': "Vertex shader input: the index of the current instance when using instanced rendering. 0 otherwise." },
-	\ { 'kind': 'v', 'word': 'gl_InvocationID',          'abbr': 'gl_InvocationID',          'info': "Tessallation control shader input: the index of the TCS invocation in this patch.\nGeometry shader input: the current instance." },
-	\ { 'kind': 'v', 'word': 'gl_Layer',                 'abbr': 'gl_Layer',                 'info': "Geometry shader output: the layer to which a primitive goes to.\nFragment shader input: the layer for the fragment, output by the geometry shader." },
-	\ { 'kind': 'v', 'word': 'gl_LocalGroupSize',        'abbr': 'gl_LocalGroupSize',        'info': "no documentation available" },
-	\ { 'kind': 'v', 'word': 'gl_LocalInvocationID',     'abbr': 'gl_LocalInvocationID',     'info': "Compute shader input: the current invocation of the shader within the work group." },
-	\ { 'kind': 'v', 'word': 'gl_LocalInvocationIndex',  'abbr': 'gl_LocalInvocationIndex',  'info': "Compute shader input: the (1D) index of the shader invocation within the work group." },
-	\ { 'kind': 'v', 'word': 'gl_NumWorkGroups',         'abbr': 'gl_NumWorkGroups',         'info': "Compute shader input; the number of work groups used when dispatching the compute shader." },
-	\ { 'kind': 'v', 'word': 'gl_out',                   'abbr': 'gl_out',                   'info': "Tessalation control shader output: the instance of gl_PerVertex." },
-	\ { 'kind': 'v', 'word': 'gl_PatchVerticesIn',       'abbr': 'gl_PatchVerticesIn',       'info': "Tessallation control shader inputs: the number of vertices in the input patch.\nTessallation evaluation shader input: the number of vertices for the patch being processed." },
-	\ { 'kind': 'v', 'word': 'gl_PerVertex',             'abbr': 'gl_PerVertex',             'info': "Vertex shader output: an unnamed interface block for vertex shader output.\nTessallation control shader input: the named interface block of data from the vertex shader.\nTessallation control shader output: the named interface block for (optional) TCS output.\nTessalation evaluation shader input: the named interface block for data from the TCS.\nTessallation evaluation shader output: an unnamed interface block for output data.\nGeometry shader input: the named interface block from a prior shading stage.\nGeometry shader output: the required, unnamed interface block for output to the FS" },
-	\ { 'kind': 'v', 'word': 'gl_PointCoord',            'abbr': 'gl_PointCoord',            'info': "Fragment shader input: the location within a point primitive of the fragment." },
-	\ { 'kind': 'v', 'word': 'gl_PointSize',             'abbr': 'gl_PointSize',             'info': "Vertex shader output:\nTessallation control shader input/output:\nTessallation evaluation shader input/output:\nGeometry shader input/output:\n   the pixel width and height of the point being rasterized." },
-	\ { 'kind': 'v', 'word': 'gl_Position',              'abbr': 'gl_Position',              'info': 'Vertex shader output:\nTessallation control shader input/output:Tessallation evaluation shader input/output:Geometry shader input/output:\n    the clipping space output position of the vertex.' },
-	\ { 'kind': 'v', 'word': 'gl_PrimitiveID',           'abbr': 'gl_PrimitiveID',           'info': "Tessallation control shader input:\n    the index of the current patch.\nGeometry shader output:\n    the primitive ID to send to the fragement shader.\nFragment shader input:\n    the index of the current primitive." },
-	\ { 'kind': 'v', 'word': 'gl_PrimitiveIDIn',         'abbr': 'gl_PrimitiveIDIn',         'info': "Geometry shader input: the ID of the current input primitive." },
-	\ { 'kind': 'v', 'word': 'gl_SampleID',              'abbr': 'gl_SampleID',              'info': "Fragment shader input: the ID of the current sample within a fragment." },
-	\ { 'kind': 'v', 'word': 'gl_SampleMask',            'abbr': 'gl_SampleMask',            'info': "Fragment shader output: the sample mask for the fragment, when using multisampled rendering." },
-	\ { 'kind': 'v', 'word': 'gl_SampleMaskIn',          'abbr': 'gl_SampleMaskIn',          'info': "Fragment shader input: bitfield for the sample mask of the current fragment." },
-	\ { 'kind': 'v', 'word': 'gl_SamplePosition',        'abbr': 'gl_SamplePosition',        'info': "Fragment shader input: the location of the current sample within the current fragment." },
-	\ { 'kind': 'v', 'word': 'gl_TessCoord',             'abbr': 'gl_TessCoord',             'info': "Tessallation evaluation shader input: the location of a vertex within the tessallated abstract patch." },
-	\ { 'kind': 'v', 'word': 'gl_TessLevelInner',        'abbr': 'gl_TessLevelInner',        'info': "Tessallation control shader output: the inner tessallation level.\nTessallation evaluation shader input: the inner tessallation level from the TCS." },
-	\ { 'kind': 'v', 'word': 'gl_TessLevelOuter',        'abbr': 'gl_TessLevelOuter',        'info': "Tessallation control shader output: the outer tessallation level.\nTessallation evaluation shader input: the outer tessallation level from the TCS." },
-	\ { 'kind': 'v', 'word': 'gl_VertexID',              'abbr': 'gl_VertexID',              'info': "Vertex shader input:\n    the index of the vertex currently being processed." },
-	\ { 'kind': 'v', 'word': 'gl_ViewportIndex',         'abbr': 'gl_ViewportIndex',         'info': "Geometry shader output: specifies which viewport to use for the primitive.\nFragment shader input: 0, or the viewport index for the primitive from the GS." },
-	\ { 'kind': 'v', 'word': 'gl_WorkGroupID',           'abbr': 'gl_WorkGroupID',           'info': "Compute shader input: the current work group for the shader invocation." },
-	\ { 'kind': 'v', 'word': 'gl_WorkGroupSize',         'abbr': 'gl_WorkGroupSize',         'info': "Compute shader constant: the size of the local work group." }
+	\ { 'kind': 'v', 'word': 'gl_FragCoord',             'abbr': 'gl_FragCoord',             'info': "in vec4 gl_FragCoord;\n
+																									 \    // Fragment input: The fragment's location in window space." },
+	\ { 'kind': 'v', 'word': 'gl_FragDepth',             'abbr': 'gl_FragDepth',             'info': "out float gl_FragDepth;\n
+																									 \    // Fragment output: The depth of the fragment." },
+	\ { 'kind': 'v', 'word': 'gl_FrontFacing',           'abbr': 'gl_FrontFacing',           'info': "in bool gl_FrontFacing;\n
+																									 \    // Fragment input: True if the fragment is front facing, false if it is back facing." },
+	\ { 'kind': 'v', 'word': 'gl_GlobalInvocationID',    'abbr': 'gl_GlobalInvocationID',    'info': "in uvec3 gl_GlobalInvocationID;\n
+																									 \    // Compute input: The unique ID for an invocation of a compute shader, with a work group." },
+	\ { 'kind': 'v', 'word': 'gl_HelperInvocation',      'abbr': 'gl_HelperInvocation',      'info': "in bool gl_HelperInvocation;
+																									 \    // no documentation available" },
+	\ { 'kind': 'v', 'word': 'gl_in',                    'abbr': 'gl_in',                    'info': "in gl_PerVertex { ... } gl_in[];\n
+																									 \    // Tessallation control input: The instance of gl_PerVertex.\n
+																									 \    // Tessallation evaluation input: The instance of gl_PerVertex.\n
+																									 \    // Geometry input: The instance if gl_PerVertex." },
+	\ { 'kind': 'v', 'word': 'gl_InstanceID',            'abbr': 'gl_InstanceID',            'info': "in int gl_InstanceID;\n
+																									 \    // Vertex input: the index of the current instance when using instanced rendering. 0 otherwise." },
+	\ { 'kind': 'v', 'word': 'gl_InvocationID',          'abbr': 'gl_InvocationID',          'info': "in int gl_InvocationID;\n;
+																									 \    // Tessallation control input: the index of the TCS invocation in this patch.\n
+																									 \    // Geometry input: the current instance." },
+	\ { 'kind': 'v', 'word': 'gl_Layer',                 'abbr': 'gl_Layer',                 'info': "out int gl_Layer;\n
+																									 \in  int gl_Layer;\n
+																									 \    // Geometry output: the layer to which a primitive goes to.\n
+																									 \    // Fragment input: the layer for the fragment, output by the geometry shader." },
+	\ { 'kind': 'v', 'word': 'gl_LocalGroupSize',        'abbr': 'gl_LocalGroupSize',        'info': "in uvec3 gl_LocalGroupSize;\n
+																									 \    // no documentation available" },
+	\ { 'kind': 'v', 'word': 'gl_LocalInvocationID',     'abbr': 'gl_LocalInvocationID',     'info': "in uvec3 gl_LocalInvocationID;\n
+																									 \    // Compute input: the current invocation of the shader within the work group." },
+	\ { 'kind': 'v', 'word': 'gl_LocalInvocationIndex',  'abbr': 'gl_LocalInvocationIndex',  'info': "in uint gl_LocalInvocationIndex;\n
+																									 \    // Compute input: the (1D) index of the shader invocation within the work group." },
+	\ { 'kind': 'v', 'word': 'gl_NumWorkGroups',         'abbr': 'gl_NumWorkGroups',         'info': "in uvec3 gl_NumWorkGroups;\n
+																									 \    // Compute input; the number of work groups used when dispatching the compute shader." },
+	\ { 'kind': 'v', 'word': 'gl_out',                   'abbr': 'gl_out',                   'info': "out gl_PerVertex { ... } gl_out[];\n
+																									 \    // Tessalation control output: the instance of gl_PerVertex." },
+	\ { 'kind': 'v', 'word': 'gl_PatchVerticesIn',       'abbr': 'gl_PatchVerticesIn',       'info': "in int gl_PatchVerticesIn;\n
+																									 \    // Tessallation control inputs: the number of vertices in the input patch.\n
+																									 \    // Tessallation evaluation input: the number of vertices for the patch being processed." },
+	\ { 'kind': 'v', 'word': 'gl_PerVertex',             'abbr': 'gl_PerVertex',             'info': "in  gl_PerVertex { ... };\n
+																									 \out gl_PerVertex { ... };\n
+																									 \    // Vertex output: an unnamed interface block for vertex shader output.\n
+																									 \    // Tessallation control input: the named interface block of data from the vertex shader.\n
+																									 \    // Tessallation control output: the named interface block for (optional) TCS output.\n
+																									 \    // Tessalation evaluation input: the named interface block for data from the TCS.\n
+																									 \    // Tessallation evaluation output: an unnamed interface block for output data.\n
+																									 \    // Geometry input: the named interface block from a prior shading stage.\n
+																									 \    // Geometry output: the required, unnamed interface block for output to the FS" },
+	\ { 'kind': 'v', 'word': 'gl_PointCoord',            'abbr': 'gl_PointCoord',            'info': "in vec2 gl_PointCoord;\n
+																									 \    // Fragment input: the location within a point primitive of the fragment." },
+	\ { 'kind': 'v', 'word': 'gl_PointSize',             'abbr': 'gl_PointSize',             'info': "out float gl_PointSize;\n
+																									 \in  float gl_PointSize;\n
+																									 \    // Vertex output:\n
+																									 \    // Tessallation control input/output:\n
+																									 \    // Tessallation evaluation input/output:\n
+																									 \    // Geometry input/output:\n
+																									 \    //    the pixel width and height of the point being rasterized." },
+	\ { 'kind': 'v', 'word': 'gl_Position',              'abbr': 'gl_Position',              'info': "out vec4 gl_Position;\n
+																									 \int vec4 gl_Position;\n
+																									 \    // Vertex output:\n
+																									 \    // Tessallation control input/output:Tessallation evaluation input/output:Geometry input/output:\n
+																									 \    //    the clipping space output position of the vertex." },
+	\ { 'kind': 'v', 'word': 'gl_PrimitiveID',           'abbr': 'gl_PrimitiveID',           'info': "in int gl_PrimitiveID;\n
+																									 \    // Tessallation control input: the index of the current patch.\n
+																									 \    // Geometry output: the primitive ID to send to the fragement shader.\n
+																									 \    // Fragment input: the index of the current primitive." },
+	\ { 'kind': 'v', 'word': 'gl_PrimitiveIDIn',         'abbr': 'gl_PrimitiveIDIn',         'info': "in int gl_PrimitiveIDIn;\n
+																									 \    // Geometry input: the ID of the current input primitive." },
+	\ { 'kind': 'v', 'word': 'gl_SampleID',              'abbr': 'gl_SampleID',              'info': "in int gl_SampleID;\n
+																									 \    // Fragment input: the ID of the current sample within a fragment." },
+	\ { 'kind': 'v', 'word': 'gl_SampleMask',            'abbr': 'gl_SampleMask',            'info': "out int gl_SampleMask[];\n
+																									 \    // Fragment output: the sample mask for the fragment, when using multisampled rendering." },
+	\ { 'kind': 'v', 'word': 'gl_SampleMaskIn',          'abbr': 'gl_SampleMaskIn',          'info': "in int gl_SampleMaskIn[];\n
+																									 \    // Fragment input: bitfield for the sample mask of the current fragment." },
+	\ { 'kind': 'v', 'word': 'gl_SamplePosition',        'abbr': 'gl_SamplePosition',        'info': "in vec2 gl_SamplePosition;\n
+																									 \    // Fragment input: the location of the current sample within the current fragment." },
+	\ { 'kind': 'v', 'word': 'gl_TessCoord',             'abbr': 'gl_TessCoord',             'info': "in vec3 gl_TessCoord;\n
+																									 \    // Tessallation evaluation input: the location of a vertex within the tessallated abstract patch." },
+	\ { 'kind': 'v', 'word': 'gl_TessLevelInner',        'abbr': 'gl_TessLevelInner',        'info': "patch out float gl_TessLevelInner[2];\n
+																									 \patch in  float gl_TessLevelInner[2];\n
+																									 \    // Tessallation control output: the inner tessallation level.\n
+																									 \    // Tessallation evaluation input: the inner tessallation level from the TCS." },
+	\ { 'kind': 'v', 'word': 'gl_TessLevelOuter',        'abbr': 'gl_TessLevelOuter',        'info': "patch out float gl_TessLevelOuter[4];\n
+																									 \patch in  float gl_TessLevelOuter[4];\n
+																									 \    // Tessallation control output: the outer tessallation level.\n
+																									 \    // Tessallation evaluation input: the outer tessallation level from the TCS." },
+	\ { 'kind': 'v', 'word': 'gl_VertexID',              'abbr': 'gl_VertexID',              'info': "in int gl_VertexID;\n
+																									 \    // Vertex input: the index of the vertex currently being processed." },
+	\ { 'kind': 'v', 'word': 'gl_ViewportIndex',         'abbr': 'gl_ViewportIndex',         'info': "out int gl_ViewportIndex;\n
+																									 \in  int gl_ViewportIndex;\n
+																									 \    // Geometry output: specifies which viewport to use for the primitive.\n
+																									 \    // Fragment input: 0, or the viewport index for the primitive from the GS." },
+	\ { 'kind': 'v', 'word': 'gl_WorkGroupID',           'abbr': 'gl_WorkGroupID',           'info': "in uvec3 gl_WorkGroupID;\n
+																									 \    // Compute input: the current work group for the shader invocation." },
+	\ { 'kind': 'v', 'word': 'gl_WorkGroupSize',         'abbr': 'gl_WorkGroupSize',         'info': "const uvec3 gl_WorkGroupSize;\n
+																									 \    // Compute constant: the size of the local work group." }
 	\ ]
 " }}}
 

@@ -45,5 +45,8 @@ if (has('gui_win32') || has('gui_gtk')) && !exists('b:browsefilter')
 					   \ 'All Files (*.*)\t*.*\n'
 endif
 
+" enable syntax highlighting in the preview window
+autocmd BufWinEnter * if &previewwindow | set filetype=glsl | endif
+
 let &cpo = s:cpo_save
 unlet s:cpo_save
