@@ -119,6 +119,7 @@ syntax keyword glslConstant	gl_MaxAtomicCounterBindings
 						\	gl_MaxVertexUniformVectors
 						\	gl_MaxViewports
 						\	gl_MinProgramTexelOffset
+						\	gl_WorkGroupSize
 "}}}
 
 " GLSL built in functions {{{
@@ -455,7 +456,6 @@ syntax keyword glslVariable	gl_ClipDistance
 						\	gl_VertexID
 						\	gl_ViewportIndex
 						\	gl_WorkGroupID
-						\	gl_WorkGroupSize
 "}}}
 
 " GLSL qualifiers {{{
