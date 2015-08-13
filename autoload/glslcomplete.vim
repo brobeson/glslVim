@@ -12,27 +12,30 @@ let s:glsl_builtins = [
 	\ { 'kind': 'd', 'word': '__FILE__',                 'abbr': '__FILE__',                 'info': 'Integer representing the current source string.' },
 	\ { 'kind': 'd', 'word': '__LINE__',                 'abbr': '__LINE__',                 'info': 'The line number where the macro is used.' },
 	\ { 'kind': 'd', 'word': '__VERSION__',              'abbr': '__VERSION__',              'info': 'Integer representing the GLSL version used.' },
-	\ { 'kind': 'v', 'word': 'gl_ClipDistance',          'abbr': 'gl_ClipDistance',          'info': "in  float gl_ClipDistance[];\n
-																									 \out float gl_ClipDistance[];\n
-																									 \    // Vertex output: the distance from the vertex to each clipping half-space.\n
-																									 \    // Tessallation control input/output: the distance from the vertex to each clipping half-space.\n
-																									 \    // Tessallation evaluation input/output: the distance from the vertex to each clipping half-space.\n
-																									 \    // Geometry input/output: the distance from the vertex to each clipping half-space.\n
-																									 \    // Fragment input: the interpolated clipping plane half-spaces." },
+	\ { 'kind': 'v', 'word': 'gl_ClipDistance',          'abbr': 'gl_ClipDistance',          'info': "// tessallation control, tessallation evaulation, geometry:\n
+																									 \//     the distance from the vertex to each clipping half-space\n
+																									 \// fragment:\n
+																									 \//     the interpolated clipping plane half-spaces\n
+																									 \in float gl_ClipDistance[];\n\n
+																									 \// vertex, tessallation control, tessallation evaluation, geometry:\n
+																									 \//     the distance from the vertex to each clipping half-space\n
+																									 \out float gl_ClipDistance[];" },
 	\ { 'kind': 'd', 'word': 'GL_compatibility_profile', 'abbr': 'GL_compatibility_profile', 'info': 'Defined as 1 if the shader profile was set to "compatibility"' },
 	\ { 'kind': 'd', 'word': 'GL_core_profile',          'abbr': 'GL_core_profile',          'info': 'Defined as 1 if the shader profile was set to "core".' },
-	\ { 'kind': 'v', 'word': 'gl_CullDistance',          'abbr': 'gl_CullDistance',          'info': "in  float gl_CullDistance[];\n
-																									 \out float gl_CullDistance[];\n
-																									 \    // no documentation available" },
+	\ { 'kind': 'v', 'word': 'gl_CullDistance',          'abbr': 'gl_CullDistance',          'info': "// no documentation available\n
+																									 \in  float gl_CullDistance[];\n
+																									 \out float gl_CullDistance[];" },
 	\ { 'kind': 'd', 'word': 'GL_es_profile',            'abbr': 'GL_es_profile',            'info': 'Defined as 1 if the shader profile was set "es".' },
-	\ { 'kind': 'v', 'word': 'gl_FragCoord',             'abbr': 'gl_FragCoord',             'info': "in vec4 gl_FragCoord;\n
-																									 \    // Fragment input: The fragment's location in window space." },
-	\ { 'kind': 'v', 'word': 'gl_FragDepth',             'abbr': 'gl_FragDepth',             'info': "out float gl_FragDepth;\n
-																									 \    // Fragment output: The depth of the fragment." },
-	\ { 'kind': 'v', 'word': 'gl_FrontFacing',           'abbr': 'gl_FrontFacing',           'info': "in bool gl_FrontFacing;\n
-																									 \    // Fragment input: True if the fragment is front facing, false if it is back facing." },
-	\ { 'kind': 'v', 'word': 'gl_GlobalInvocationID',    'abbr': 'gl_GlobalInvocationID',    'info': "in uvec3 gl_GlobalInvocationID;\n
-																									 \    // Compute input: The unique ID for an invocation of a compute shader, with a work group." },
+	\ { 'kind': 'v', 'word': 'gl_FragCoord',             'abbr': 'gl_FragCoord',             'info': "// fragment: the fragment's location in window space\n
+																									 \in vec4 gl_FragCoord;" },
+	\ { 'kind': 'v', 'word': 'gl_FragDepth',             'abbr': 'gl_FragDepth',             'info': "// fragment: The depth of the fragment\n
+																									 \out float gl_FragDepth;" },
+	\ { 'kind': 'v', 'word': 'gl_FrontFacing',           'abbr': 'gl_FrontFacing',           'info': "// fragment:\n
+																									 \//     true if the fragment is front facing, false if it is back facing\n
+																									 \in bool gl_FrontFacing;" },
+	\ { 'kind': 'v', 'word': 'gl_GlobalInvocationID',    'abbr': 'gl_GlobalInvocationID',    'info': "// compute input:\n
+																									 \//    the unique ID for an invocation of a compute shader, with a work group\n
+																									 \in uvec3 gl_GlobalInvocationID;" },
 	\ { 'kind': 'v', 'word': 'gl_HelperInvocation',      'abbr': 'gl_HelperInvocation',      'info': "in bool gl_HelperInvocation;
 																									 \    // no documentation available" },
 	\ { 'kind': 'v', 'word': 'gl_in',                    'abbr': 'gl_in',                    'info': "in gl_PerVertex { ... } gl_in[];\n
@@ -396,6 +399,47 @@ let s:variables =	[	"gl_ClipDistance",
 					\	"gl_WorkGroupID",
 					\	"gl_WorkGroupSize" ]
 "}}}
+
+"au! CursorHold *.[ch] nested call PreviewWord()
+function! glslcomplete#preview_highlight()
+"  if &previewwindow			" don't do this in the preview window
+"    return
+"  endif
+"  let w = expand("<cword>")		" get the word under cursor
+"  if w =~ '\a'			" if the word contains a letter
+"
+    " Delete any existing highlight before showing another tag
+    "silent! wincmd P			" jump to preview window
+	wincmd P
+    if &previewwindow			" if we really get there...
+		set filetype=glsl
+"      match none			" delete existing highlight
+      wincmd p			" back to old window
+    endif
+"
+"    " Try displaying a matching tag for the word under the cursor
+"    try
+"       exe "ptag " . w
+"    catch
+"      return
+"    endtry
+"
+"    silent! wincmd P			" jump to preview window
+"    if &previewwindow		" if we really get there...
+"	 if has("folding")
+"	   silent! .foldopen		" don't want a closed fold
+"	 endif
+"	 call search("$", "b")		" to end of previous line
+"	 let w = substitute(w, '\\', '\\\\', "")
+"	 call search('\<\V' . w . '\>')	" position cursor on match
+"	 " Add a match highlight to the word at this position
+"      hi previewWord term=bold ctermbg=green guibg=green
+"	 exe 'match previewWord "\%' . line(".") . 'l\%' . col(".") . 'c\k*"'
+"      wincmd p			" back to old window
+"    endif
+"  endif
+endfunction
+
 
 " This function is used for the 'omnifunc' option.
 function! glslcomplete#Complete(findstart, base)
