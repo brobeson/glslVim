@@ -130,78 +130,294 @@ let s:glsl_builtins = [
 " }}}
 
 " GLSL built in constants {{{
-let s:constants =	[	"gl_MaxAtomicCounterBindings",
-					\	"gl_MaxAtomicCounterBufferSize",
-					\	"gl_MaxClipDistances",
-					\	"gl_MaxCombinedAtomicCounterBuffers",
-					\	"gl_MaxCombinedAtomicCounters",
-					\	"gl_MaxCombinedClipAndCullDistances",
-					\	"gl_MaxCombinedImageUnitsAndFragmentOutputs",
-					\	"gl_MaxCombinedImageUniforms",
-					\	"gl_MaxCombinedShaderOutputResources",
-					\	"gl_MaxCombinedTextureImageUnits",
-					\	"gl_MaxComputeAtomicGounterBuffers",
-					\	"gl_MaxComputeAtomicCounters",
-					\	"gl_MaxComputeImageUniforms",
-					\	"gl_MaxComputeTextureImageUnits",
-					\	"gl_MaxComputeUniformComponents",
-					\	"gl_MaxComputeWorkGroupCount",
-					\	"gl_MaxComputeWorkGroupSize",
-					\	"gl_MaxCullDistances",
-					\	"gl_MaxProgramTexelOffset",
-					\	"gl_MaxDrawBuffers",
-					\	"gl_MaxFragmentAtomicCounterBuffers",
-					\	"gl_MaxFragmentAtomicCounters",
-					\	"gl_MaxFragmentImageUniforms",
-					\	"gl_MaxFragmentInputComponents",
-					\	"gl_MaxFragmentUniformComponents",
-					\	"gl_MaxFragmentUniformVectors",
-					\	"gl_MaxGeometryAtomicCounterBuffers",
-					\	"gl_MaxGeometryAtomicCounters",
-					\	"gl_MaxGeometryImageUniforms",
-					\	"gl_MaxGeometryInputComponents",
-					\	"gl_MaxGeometryOutputComponents",
-					\	"gl_MaxGeometryOutputVertices",
-					\	"gl_MaxGeometryTextureImageUnits",
-					\	"gl_MaxGeometryTotalOutputComponents",
-					\	"gl_MaxGeometryUniformComponents",
-					\	"gl_MaxGeometryVaryingComponents",
-					\	"gl_MaxImageSamples",
-					\	"gl_MaxImageUnits",
-					\	"gl_MaxPatchVertices",
-					\	"gl_MaxSamples",
-					\	"gl_MaxTessControlAtomicCounterBuffers",
-					\	"gl_MaxTessControlAtomicCounters",
-					\	"gl_MaxTessControlImageUniforms",
-					\	"gl_MaxTessControlInputComponents",
-					\	"gl_MaxTessControlOutputComponents",
-					\	"gl_MaxTessControlTextureImageUnits",
-					\	"gl_MaxTessControlTotalOutputComponents",
-					\	"gl_MaxTessControlUniformComponents",
-					\	"gl_MaxTessEvaluationAtomicCounterBuffers",
-					\	"gl_MaxTessEvaluationAtomicCounters",
-					\	"gl_MaxTessEvaluationImageUniforms",
-					\	"gl_MaxTessEvaluationInputComponents",
-					\	"gl_MaxTessEvaluationOutputComponents",
-					\	"gl_MaxTessEvaluationTextureImageUnits",
-					\	"gl_MaxTessEvaluationUniformComponents",
-					\	"gl_MaxTessGenLevel",
-					\	"gl_MaxTessPatchComponents",
-					\	"gl_MaxTextureImageUnits",
-					\	"gl_MaxTransformFeedbackBuffers",
-					\	"gl_MaxTransformFeedbackInterleavedComponents",
-					\	"gl_MaxVaryingComponents",
-					\	"gl_MaxVaryingVectors",
-					\	"gl_MaxVertexAtomicCounterBuffers",
-					\	"gl_MaxVertexAtomicCounters",
-					\	"gl_MaxVertexAttribs",
-					\	"gl_MaxVertexImageUniforms",
-					\	"gl_MaxVertexOutputComponents",
-					\	"gl_MaxVertexTextureImageUnits",
-					\	"gl_MaxVertexUniformComponents",
-					\	"gl_MaxVertexUniformVectors",
-					\	"gl_MaxViewports",
-					\	"gl_MinProgramTexelOffset" ]
+	\ { 'kind': 'v',	'word': 'gl_MaxAtomicCounterBindings',
+	\					'abbr': 'gl_MaxAtomicCounterBindings',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\							"const int gl_MaxAtomicCounterBindings = 1;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxAtomicCounterBufferSize',
+	\					'abbr': 'gl_MaxAtomicCounterBufferSize',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\							"const int gl_MaxAtomicCounterBufferSize = 32;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxClipDistances',
+	\					'abbr': 'gl_MaxClipDistances',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxClipDistances = 8;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxCombinedAtomicCounterBuffers',
+	\					'abbr': 'gl_MaxCombinedAtomicCounterBuffers',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxCombinedAtomicCounterBuffers = 1;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxCombinedAtomicCounters',
+	\					'abbr': 'gl_MaxCombinedAtomicCounters',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxCombinedAtomicCounters = 8;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxCombinedClipAndCullDistances',
+	\					'abbr': 'gl_MaxCombinedClipAndCullDistances',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxCombinedClipAndCullDistances = 8;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxCombinedImageUnitsAndFragmentOutputs',
+	\					'abbr': 'gl_MaxCombinedImageUnitsAndFragmentOutputs',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxCombinedImageUnitsAndFragmentOutputs = 8;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxCombinedImageUniforms',
+	\					'abbr': 'gl_MaxCombinedImageUniforms',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxCombinedImageUniforms = 8;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxCombinedShaderOutputResources',
+	\					'abbr': 'gl_MaxCombinedShaderOutputResources',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxCombinedShaderOutputResources = 16;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxCombinedTextureImageUnits',
+	\					'abbr': 'gl_MaxCombinedTextureImageUnits',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxCombinedTextureImageUnits = 80;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxComputeAtomicCounterBuffers',
+	\					'abbr': 'gl_MaxComputeAtomicCounterBuffers',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxComputeAtomicCounterBuffers = 1;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxComputeAtomicCounters',
+	\					'abbr': 'gl_MaxComputeAtomicCounters',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxComputeAtomicCounters = 8;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxComputeImageUniforms',
+	\					'abbr': 'gl_MaxComputeImageUniforms',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxComputeImageUniforms = 8;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxComputeTextureImageUnits',
+	\					'abbr': 'gl_MaxComputeTextureImageUnits',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxComputeTextureImageUnits = 16;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxComputeUniformComponents',
+	\					'abbr': 'gl_MaxComputeUniformComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxComputeUniformComponents = 1024;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxComputeWorkGroupCount',
+	\					'abbr': 'gl_MaxComputeWorkGroupCount',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const ivec3 gl_MaxComputeWorkGroupCount = {65535, 65535, 65535};" },
+	\ { 'kind': 'v',	'word': 'gl_MaxComputeWorkGroupSize',
+	\					'abbr': 'gl_MaxComputeWorkGroupSize',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const iv3c3 gl_MaxComputeWorkGroupSize[] = {1024, 1024, 64};" },
+	\ { 'kind': 'v',	'word': 'gl_MaxCullDistances',
+	\					'abbr': 'gl_MaxCullDistances',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxCullDistances = 8;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxProgramTexelOffset',
+	\					'abbr': 'gl_MaxProgramTexelOffset',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxProgramTexelOffset = 7;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxDrawBuffers',
+	\					'abbr': 'gl_MaxDrawBuffers',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxDrawBuffers = 8;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxFragmentAtomicCounterBuffers',
+	\					'abbr': 'gl_MaxFragmentAtomicCounterBuffers',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxFragmentAtomicCounterBuffers = 1;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxFragmentAtomicCounters',
+	\					'abbr': 'gl_MaxFragmentAtomicCounters',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxFragmentAtomicCounters = 8;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxFragmentImageUniforms',
+	\					'abbr': 'gl_MaxFragmentImageUniforms',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxFragmentImageUniforms = 8;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxFragmentInputComponents',
+	\					'abbr': 'gl_MaxFragmentInputComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxFragmentInputComponents = 128;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxFragmentUniformComponents',
+	\					'abbr': 'gl_MaxFragmentUniformComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxFragmentUniformComponents = 1024;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxFragmentUniformVectors',
+	\					'abbr': 'gl_MaxFragmentUniformVectors',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxFragmentUniformVectors = 256;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxGeometryAtomicCounterBuffers',
+	\					'abbr': 'gl_MaxGeometryAtomicCounterBuffers',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxGeometryAtomicCounterBuffers = 0;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxGeometryAtomicCounters',
+	\					'abbr': 'gl_MaxGeometryAtomicCounters',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxGeometryAtomicCounters = 0;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxGeometryImageUniforms',
+	\					'abbr': 'gl_MaxGeometryImageUniforms',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxGeometryImageUniforms = 0;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxGeometryInputComponents',
+	\					'abbr': 'gl_MaxGeometryInputComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxGeometryInputComponents = 64;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxGeometryOutputComponents',
+	\					'abbr': 'gl_MaxGeometryOutputComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxGeometryOutputComponents = 128;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxGeometryOutputVertices',
+	\					'abbr': 'gl_MaxGeometryOutputVertices',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxGeometryOutputVertices = 256;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxGeometryTextureImageUnits',
+	\					'abbr': 'gl_MaxGeometryTextureImageUnits',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxGeometryTextureImageUnits = 16;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxGeometryTotalOutputComponents',
+	\					'abbr': 'gl_MaxGeometryTotalOutputComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxGeometryTotalOutputComponents = 1024;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxGeometryUniformComponents',
+	\					'abbr': 'gl_MaxGeometryUniformComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxGeometryUniformComponents = 1024;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxGeometryVaryingComponents',
+	\					'abbr': 'gl_MaxGeometryVaryingComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxGeometryVaryingComponents = 64;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxImageSamples',
+	\					'abbr': 'gl_MaxImageSamples',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxImageSamples = 0;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxImageUnits',
+	\					'abbr': 'gl_MaxImageUnits',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxImageUnits = 8;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxPatchVertices',
+	\					'abbr': 'gl_MaxPatchVertices',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxPatchVertices = 32;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxSamples',
+	\					'abbr': 'gl_MaxSamples',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxSamples = 4;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessControlAtomicCounterBuffers',
+	\					'abbr': 'gl_MaxTessControlAtomicCounterBuffers',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessControlAtomicCounterBuffers = 0;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessControlAtomicCounters',
+	\					'abbr': 'gl_MaxTessControlAtomicCounters',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessControlAtomicCounters = 0;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessControlImageUniforms',
+	\					'abbr': 'gl_MaxTessControlImageUniforms',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessControlImageUniforms = 0;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessControlInputComponents',
+	\					'abbr': 'gl_MaxTessControlInputComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessControlInputComponents = 128;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessControlOutputComponents',
+	\					'abbr': 'gl_MaxTessControlOutputComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessControlOutputComponents = 128;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessControlTextureImageUnits',
+	\					'abbr': 'gl_MaxTessControlTextureImageUnits',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessControlTextureImageUnits = 16;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessControlTotalOutputComponents',
+	\					'abbr': 'gl_MaxTessControlTotalOutputComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessControlTotalOutputComponents = 4096;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessControlUniformComponents',
+	\					'abbr': 'gl_MaxTessControlUniformComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessControlUniformComponents = 1024;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessEvaluationAtomicCounterBuffers',
+	\					'abbr': 'gl_MaxTessEvaluationAtomicCounterBuffers',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessEvaluationAtomicCounterBuffers = 0;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessEvaluationAtomicCounters',
+	\					'abbr': 'gl_MaxTessEvaluationAtomicCounters',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessEvaluationAtomicCounters = 0;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessEvaluationImageUniforms',
+	\					'abbr': 'gl_MaxTessEvaluationImageUniforms',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessEvaluationImageUniforms = 0;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessEvaluationInputComponents',
+	\					'abbr': 'gl_MaxTessEvaluationInputComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessEvaluationInputComponents = 128;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessEvaluationOutputComponents',
+	\					'abbr': 'gl_MaxTessEvaluationOutputComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessEvaluationOutputComponents = 128;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessEvaluationTextureImageUnits',
+	\					'abbr': 'gl_MaxTessEvaluationTextureImageUnits',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessEvaluationTextureImageUnits = 16;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessEvaluationUniformComponents',
+	\					'abbr': 'gl_MaxTessEvaluationUniformComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessEvaluationUniformComponents = 1024;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessGenLevel',
+	\					'abbr': 'gl_MaxTessGenLevel',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessGenLevel = 64;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTessPatchComponents',
+	\					'abbr': 'gl_MaxTessPatchComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTessPatchComponents = 120;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTextureImageUnits',
+	\					'abbr': 'gl_MaxTextureImageUnits',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTextureImageUnits = 16;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTransformFeedbackBuffers',
+	\					'abbr': 'gl_MaxTransformFeedbackBuffers',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTransformFeedbackBuffers = 4;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxTransformFeedbackInterleavedComponents',
+	\					'abbr': 'gl_MaxTransformFeedbackInterleavedComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxTransformFeedbackInterleavedComponents = 64;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxVaryingComponents',
+	\					'abbr': 'gl_MaxVaryingComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxVaryingComponents = 60;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxVaryingVectors',
+	\					'abbr': 'gl_MaxVaryingVectors',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxVaryingVectors = 15;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxVertexAtomicCounterBuffers',
+	\					'abbr': 'gl_MaxVertexAtomicCounterBuffers',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxVertexAtomicCounterBuffers = 0;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxVertexAtomicCounters',
+	\					'abbr': 'gl_MaxVertexAtomicCounters',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxVertexAtomicCounters = 0;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxVertexAttribs',
+	\					'abbr': 'gl_MaxVertexAttribs',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxVertexAttribs = 16;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxVertexImageUniforms',
+	\					'abbr': 'gl_MaxVertexImageUniforms',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxVertexImageUniforms = 0;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxVertexOutputComponents',
+	\					'abbr': 'gl_MaxVertexOutputComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxVertexOutputComponents = 64;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxVertexTextureImageUnits',
+	\					'abbr': 'gl_MaxVertexTextureImageUnits',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxVertexTextureImageUnits = 16;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxVertexUniformComponents',
+	\					'abbr': 'gl_MaxVertexUniformComponents',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxVertexUniformComponents = 1024;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxVertexUniformVectors',
+	\					'abbr': 'gl_MaxVertexUniformVectors',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxVertexUniformVectors = 256;" },
+	\ { 'kind': 'v',	'word': 'gl_MaxViewports',
+	\					'abbr': 'gl_MaxViewports',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MaxViewports = 16;" },
+	\ { 'kind': 'v',	'word': 'gl_MinProgramTexelOffset',
+	\					'abbr': 'gl_MinProgramTexelOffset',
+	\					'info': "\/\/ must be at least the value shown\n" .
+	\					"const int gl_MinProgramTexelOffset = -8;" },
 "}}}
 
 " GLSL built in functions {{{
