@@ -29,10 +29,10 @@ let s:glsl_builtins = [
 	\							"out float gl_ClipDistance[];" },
 	\ { 'kind': 'd',	'word': 'GL_compatibility_profile',
 	\					'abbr': 'GL_compatibility_profile',
-	\					'info': "\/\/ Defined as 1 if the shader profile was set to	\							"compatibility\"" },
+	\					'info': "\/\/ Defined as 1 if the shader profile was set to \"compatibility\"" },
 	\ { 'kind': 'd',	'word': 'GL_core_profile',
 	\					'abbr': 'GL_core_profile',
-	\					'info': "\/\/ Defined as 1 if the shader profile was set to	\							"core\"" },
+	\					'info': "\/\/ Defined as 1 if the shader profile was set to \"core\"" },
 	\ { 'kind': 'v',	'word': 'gl_CullDistance',
 	\					'abbr': 'gl_CullDistance',
 	\					'info': "\/\/ vertex, tessallation control & evaluation, geometry:\n" .
@@ -43,7 +43,7 @@ let s:glsl_builtins = [
 	\							"in float gl_CullDistance[];" },
 	\ { 'kind': 'd',	'word': 'GL_es_profile',
 	\					'abbr': 'GL_es_profile',
-	\					'info': "\/\/ Defined as 1 if the shader profile was set	\							"es\"" },
+	\					'info': "\/\/ Defined as 1 if the shader profile was set \"es\"" },
 	\ { 'kind': 'v',	'word': 'gl_FragCoord',
 	\					'abbr': 'gl_FragCoord',
 	\					'info': "\/\/ fragment: the fragment's location in window space\n" .
