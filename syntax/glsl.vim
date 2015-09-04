@@ -299,6 +299,10 @@ syntax keyword glslLayout		layout precision
 
 " GLSL types {{{
 " transparent types
+" genType isn't really a type in GLSL, but it's used through out
+" documentation when a built in function is overloaded for float,
+" vec2, etc. the same applies to genBType, genDType, genIType and
+" genUType.
 syntax keyword glslTransparentType	bool
 								\	bvec2
 								\	bvec3
@@ -320,6 +324,11 @@ syntax keyword glslTransparentType	bool
 								\	dvec3
 								\	dvec4
 								\	float
+								\	genType
+								\	genBType
+								\	genDType
+								\	genIType
+								\	genUType
 								\	int
 								\	ivec2
 								\	ivec3
