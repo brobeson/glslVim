@@ -705,20 +705,49 @@ let s:glsl_builtins = [
 	\							"void barrier();\n\n" },
 	\ { 'kind': 'f',	'word': 'bitCount(',
 	\					'abbr': 'bitCount',
-	\					'info': "\/\/ \n" .
-	\							"bitCount();\n\n" },
+	\					'info': "\/\/ Count the number of 1 bits in an integer.\n" .
+	\							"\/\/ param[in] value: The integer for which to count bits.\n".
+	\							"\/\/ returns   The number of bits in value that are set to 1.\n".
+	\							"genIType bitCount(genIType value);\n".
+	\							"genIType bitCount(genUType value);\n\n" },
 	\ { 'kind': 'f',	'word': 'bitfieldExtract(',
 	\					'abbr': 'bitfieldExtract',
-	\					'info': "\/\/ \n" .
-	\							"bitfieldExtract();\n\n" },
+	\					'info': "\/\/ Extract a range of bits from an integer. The extracted bits are in the LSBs\n" .
+	\							"\/\/ of the return value. The range to extract is [offset, offset + bits + 1].\n".
+	\							"\/\/ For unsigned data, the result's MSBs are set to 0. For signed data, the\n".
+	\							"\/\/ result's MSBs are set to offset + base - 1. The result is undefined if\n".
+	\							"\/\/ offset or bits is negative, or if their sum is greater than the number of\n".
+	\							"\/\/ bits available in value.\n".
+	\							"\/\/ param[in] value:  The integer from which to extract bits.\n".
+	\							"\/\/ param[in] offset: The index of the first bit to extract.\n".
+	\							"\/\/ param[in] bits:   The number of bits to extract. If  bits is 0, the result\n".
+	\							"\/\/                   is 0.\n".
+	\							"\/\/ returns   The bits extracted from value.\n".
+	\							"genIType bitfieldExtract(genIType value, int offset, int bits);\n".
+	\							"genUType bitfieldExtract(genUType value, int offset, int bits);\n\n" },
 	\ { 'kind': 'f',	'word': 'bitfieldInsert(',
 	\					'abbr': 'bitfieldInsert',
-	\					'info': "\/\/ \n" .
-	\							"bitfieldInsert();\n\n" },
+	\					'info': "\/\/ Insert a range of bits into an integer.\n" .
+	\					'info': "\/\/ Insert a range of bits into an integer. The inserted bits are bits\n".
+	\							"\/\/ [0, bits - 1] of insert. Bits [offset, offset + bits + 1] of base are set\n".
+	\							"\/\/ to the inserted bits. The result is undefined if offset or bits is\n".
+	\							"\/\/ negative, or if their sum is greater than the number of bits available in\n".
+	\							"\/\/ value.\n".
+	\							"\/\/ param[in] base:   The integer into which bits should be inserted.\n".
+	\							"\/\/ param[in] insert: Contains the bits to insert in the LSBs.\n".
+	\							"\/\/ param[in] offset: The index into base of the first bit to insert.\n".
+	\							"\/\/ param[in] bits:   The number of bits to insert.\n".
+	\							"\/\/ returns   base with the specified bits inserted.\n".
+	\							"genIType bitfieldInsert(genIType base, genIType insert, int offset, int bits);\n".
+	\							"genUType bitfieldInsert(genUType base, genUType insert, int offset, int bits);\n\n" },
 	\ { 'kind': 'f',	'word': 'bitfieldReverse(',
 	\					'abbr': 'bitfieldReverse',
-	\					'info': "\/\/ \n" .
-	\							"bitfieldReverse();\n\n" },
+	\					'info': "\/\/ Reverse the order of the bits in an integer. Bit n receives the value in\n" .
+	\							"\/\/ bit (N - 1) - n (where N is the bit width of value).\n".
+	\							"\/\/ param[in] value: The integer to reverse.\n".
+	\							"\/\/ returnes  The reverse of value.\n".
+	\							"genIType bitfieldReverse(genIType value);\n".
+	\							"genUType bitfieldReverse(genUType value);\n\n" },
 	\ { 'kind': 'f',	'word': 'ceil(',
 	\					'abbr': 'ceil',
 	\					'info': "\/\/ Calculate the nearest integer greater than or equal to x.\n".
