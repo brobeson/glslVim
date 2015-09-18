@@ -758,9 +758,8 @@ let s:glsl_builtins = [
 	\ { 'kind': 'f',	'word': 'clamp(',
 	\					'abbr': 'clamp',
 	\					'info': "\/\/ Constrain a value to a specific range.\n" .
-	\							"\/\/ param[in] x:      The value to constrain.\n".
-	\							"\/\/ param[in] minVal: The lower bound of the range.\n".
-	\							"\/\/ param[in] maxVal: The upper bound of the range.\n".
+	\							"\/\/ param[in] x:             The value to constrain.\n".
+	\							"\/\/ param[in] minVal,maxVal: The bounds of the range.\n".
 	\							"\/\/ returns   min(max(x, minVal), maxVal);\n".
 	\							"genType  clamp(genType  x, genType  minVal, genType  maxVal);\n" .
 	\							"genType  clamp(genType  x, float    minVal, float    maxVal);\n" .
@@ -785,8 +784,7 @@ let s:glsl_builtins = [
 	\ { 'kind': 'f',	'word': 'cross(',
 	\					'abbr': 'cross',
 	\					'info': "\/\/ Calculate the cross product of two vectors.\n" .
-	\							"\/\/ param[in] x: The first vector for the cross product operation.\n".
-	\							"\/\/ param[in] y: The second vector for the cross product operation.\n".
+	\							"\/\/ param[in] x,y: The vectors for the cross product operation.\n".
 	\							"\/\/ returns   (x.y)(y.z) - (x.z)(y.y)\n".
 	\							"\/\/           (x.z)(y.x) - (x.x)(y.z)\n".
 	\							"\/\/           (x.x)(y.y) - (x.y)(y.x)\n".
@@ -836,16 +834,14 @@ let s:glsl_builtins = [
 	\ { 'kind': 'f',	'word': 'distance(',
 	\					'abbr': 'distance',
 	\					'info': "\/\/ Calculate the distance between two points.\n".
-	\							"\/\/ param[in] p0: The first point for the distance calculation.\n".
-	\							"\/\/ param[in] p1: The second point for the distance calculation.\n".
+	\							"\/\/ param[in] p0,p1: The points for the distance calculation.\n".
 	\							"\/\/ returns   length(p1 - p0)\n" .
 	\							"double distance(genDType p0, genDType p1);\n".
 	\							"float  distance(genType  p0, genType  p1);\n\n" },
 	\ { 'kind': 'f',	'word': 'dot(',
 	\					'abbr': 'dot',
 	\					'info': "\/\/ Calculate the dot product of two vectors.\n" .
-	\							"\/\/ param[in] x: The first vector for the dot product operation\n".
-	\							"\/\/ param[in] y: The second vector for the dot product operation\n".
+	\							"\/\/ param[in] x,y: The vectors for the dot product operation.\n".
 	\							"\/\/ returns   (x.x)(y.x) + (x.y)(y.y) + ...\n".
 	\							"float  dot(genType  x, genType  y);\n".
 	\							"double dot(genDType x, genDType y);\n\n" },
@@ -897,10 +893,21 @@ let s:glsl_builtins = [
 	\							"genDType faceforward(genDType N, genDType I, genDType Nref);\n\n" },
 	\ { 'kind': 'f',	'word': 'findLSB(',
 	\					'abbr': 'findLSB',
-	\					'info': "\/\/ \n" .
-	\							"findLSB();\n\n" },
+	\					'info': "\/\/ Find the index of the least significant bit set to 1.\n" .
+	\							"\/\/ param[in] value: The integer to search for the LSB.\n".
+	\							"\/\/ returns   The index of the least significant bit that is 1. If value is 0,\n".
+	\							"\/\/           -1 is returned.\n".
+	\							"genIType findLSB(genIType value);\n".
+	\							"genUType findLSB(genUType value);\n\n" },
 	\ { 'kind': 'f',	'word': 'findMSB(',
 	\					'abbr': 'findMSB',
+	\					'info': "\/\/ Find the index of the most significant bit set to 1.\n" .
+	\							"\/\/ param[in] value: The integer to search for the MSB.\n".
+	\							"\/\/ returns   If value is positive, the index of the most significant bit that\n".
+	\							"\/\/           is 1. If value is 0, -1 is returned. If value is negative, the\n".
+	\							"\/\/           most significant bit that is set to 0.\n".
+	\							"genIType findMSB(genIType value);\n".
+	\							"genUType findMSB(genUType value);\n\n" },
 	\					'info': "\/\/ \n" .
 	\							"findMSB();\n\n" },
 	\ { 'kind': 'f',	'word': 'floatBitsToInt(',
@@ -987,12 +994,66 @@ let s:glsl_builtins = [
 	\							"groupMemoryBarrier();\n\n" },
 	\ { 'kind': 'f',	'word': 'imageAtomicAdd(',
 	\					'abbr': 'imageAtomicAdd',
-	\					'info': "\/\/ \n" .
-	\							"imageAtomicAdd();\n\n" },
+	\					'info': "\/\/ Atomically add to an image texel.\n" .
+	\							"\/\/ param[in] image:  The image unit to which to add.\n".
+	\							"\/\/ param[in] P:      The coordinates of the texel to which to add.\n".
+	\							"\/\/ param[in] sample: The sample in the image to which to add.\n".
+	\							"\/\/ param[in] data:   The value to add to the image.\n".
+	\							"\/\/ returns   The original texel value of the image.\n".
+	\							"uint imageAtomicAdd(gimage1D        image, int   P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimage2D        image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimage3D        image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimage2DRect    image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimageCube      image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gbufferImage    image, int   P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimage1DArray   image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimage2DArray   image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimageCubeArray image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimage2DMS      image, ivec2 P, int sample, uint data);\n".
+	\							"uint imageAtomicAdd(gimage2DMSArray image, ivec3 P, int sample, uint data);\n".
+	\							"int  imageAtomicAdd(gimage1D        image, int   P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimage2D        image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimage3D        image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimage2DRect    image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimageCube      image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gbufferImage    image, int   P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimage1DArray   image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimage2DArray   image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimageCubeArray image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimage2DMS      image, ivec2 P, int sample, int  data);\n".
+	\							"int  imageAtomicAdd(gimage2DMSArray image, ivec3 P, int sample, int  data);\n" },
 	\ { 'kind': 'f',	'word': 'imageAtomicAnd(',
 	\					'abbr': 'imageAtomicAnd',
-	\					'info': "\/\/ \n" .
-	\							"imageAtomicAnd();\n\n" },
+	\					'info': "\/\/ Atomically calculate the logical AND of an image texel value with an input\n".
+	\							"\/\/ value. The result is written to the image. The texel's original value is\n".
+	\							"\/\/ returned.\n" .
+	\							"\/\/ param[in] image:  The image unit used for the operation.\n".
+	\							"\/\/ param[in] P:      The coordinate of the texel used for the operation.\n".
+	\							"\/\/ param[in] sample: The sample in the image used for the operation.\n".
+	\							"\/\/ param[in] data:   The value to AND with the texel data.\n".
+	\							"\/\/ returns   The original value of the image texel.\n".
+	\							"uint imageAtomicAnd(gimage1D        image, int   P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimage2D        image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimage3D        image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimage2DRect    image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimageCube      image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gbufferImage    image, int   P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimage1DArray   image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimage2DArray   image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimageCubeArray image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimage2DMS      image, ivec2 P, int sample, uint data);\n".
+	\							"uint imageAtomicAnd(gimage2DMSArray image, ivec3 P, int sample, uint data);\n".
+	\							"int  imageAtomicAnd(gimage1D        image, int   P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimage2D        image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimage3D        image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimage2DRect    image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimageCube      image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gbufferImage    image, int   P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimage1DArray   image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimage2DArray   image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimageCubeArray image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimage2DMS      image, ivec2 P, int sample, int  data);\n".
+	\							"int  imageAtomicAnd(gimage2DMSArray image, ivec3 P, int sample, int  data);\n" },
 	\ { 'kind': 'f',	'word': 'imageAtomicCompSwap(',
 	\					'abbr': 'imageAtomicCompSwap',
 	\					'info': "\/\/ \n" .
@@ -1019,24 +1080,69 @@ let s:glsl_builtins = [
 	\							"imageAtomicXor();\n\n" },
 	\ { 'kind': 'f',	'word': 'imageLoad(',
 	\					'abbr': 'imageLoad',
-	\					'info': "\/\/ \n" .
-	\							"imageLoad();\n\n" },
+	\					'info': "\/\/ Get a texel from an image.\n" .
+	\							"\/\/ param[in] image:  The image unit from which to load a texel.\n".
+	\							"\/\/ param[in] P:      The coordinates for the image texel to load.\n".
+	\							"\/\/ param[in] sample: The sample in the image to load.\n".
+	\							"gvec4 imageLoad(gimage1D        image, int   P);\n".
+	\							"gvec4 imageLoad(gimage2D        image, ivec2 P);\n".
+	\							"gvec4 imageLoad(gimage3D        image, ivec3 P);\n".
+	\							"gvec4 imageLoad(gimage2DRect    image, ivec2 P);\n".
+	\							"gvec4 imageLoad(gimageCube      image, ivec3 P);\n".
+	\							"gvec4 imageLoad(gbufferImage    image, int   P);\n".
+	\							"gvec4 imageLoad(gimage1DArray   image, ivec2 P);\n".
+	\							"gvec4 imageLoad(gimage2DArray   image, ivec3 P);\n".
+	\							"gvec4 imageLoad(gimageCubeArray image, ivec3 P);\n".
+	\							"gvec4 imageLoad(gimage2DMS      image, ivec2 P, int sample);\n".
+	\							"gvec4 imageLoad(gimage2DMSArray image, ivec3 P, int sample);\n\n" },
 	\ { 'kind': 'f',	'word': 'imageSamples(',
 	\					'abbr': 'imageSamples',
-	\					'info': "\/\/ \n" .
-	\							"imageSamples();\n\n" },
+	\					'info': "\/\/ Get the number of samples in an image.\n" .
+	\							"\/\/ param[in] image: The image to which the image data is bound.\n".
+	\							"\/\/ returns   The number of samples per texel for the image.\n".
+	\							"int imageSamples(gimage2DMS      image);\n".
+	\							"int imageSamples(gimage2DMSArray image);\n\n" },
 	\ { 'kind': 'f',	'word': 'imageSize(',
 	\					'abbr': 'imageSize',
-	\					'info': "\/\/ \n" .
-	\							"imageSize();\n\n" },
+	\					'info': "\/\/ Get the dimensions of an image.\n" .
+	\							"\/\/ param[in] image: The image to which the image data is bound.\n".
+	\							"\/\/ returns   The width, height, depth, and layers of an image (in that order).\n".
+	\							"int   imageSize(gimage1D        image);\n".
+	\							"ivec2 imageSize(gimage2D        image);\n".
+	\							"ivec3 imageSize(gimage3D        image);\n".
+	\							"ivec2 imageSize(gimageCube      image);\n".
+	\							"ivec3 imageSize(gimageCubeArray image);\n".
+	\							"ivec2 imageSize(gimageRect      image);\n".
+	\							"ivec2 imageSize(gimage1DArray   image);\n".
+	\							"ivec3 imageSize(gimage2DArray   image);\n".
+	\							"int   imageSize(gimageBuffer    image);\n".
+	\							"ivec2 imageSize(gimage2DMS      image);\n".
+	\							"ivec3 imageSize(gimage2DMSArray image);\n\n" },
 	\ { 'kind': 'f',	'word': 'imageStore(',
 	\					'abbr': 'imageStore',
-	\					'info': "\/\/ \n" .
-	\							"imageStore();\n\n" },
+	\					'info': "\/\/ Write a texel to an image.\n" .
+	\							"\/\/ param[in] image:  The image unit to which to write a texel.\n".
+	\							"\/\/ param[in] P:      The coordinates for the image texel to write.\n".
+	\							"\/\/ param[in] sample: The sample in the image to write.\n".
+	\							"\/\/ param[in] data:   The data to write to the image.\n".
+	\							"void imageStore(gimage1D        image, int   P,             gvec4 data);\n".
+	\							"void imageStore(gimage2D        image, ivec2 P,             gvec4 data);\n".
+	\							"void imageStore(gimage3D        image, ivec3 P,             gvec4 data);\n".
+	\							"void imageStore(gimage2DRect    image, ivec2 P,             gvec4 data);\n".
+	\							"void imageStore(gimageCube      image, ivec3 P,             gvec4 data);\n".
+	\							"void imageStore(gbufferImage    image, int   P,             gvec4 data);\n".
+	\							"void imageStore(gimage1DArray   image, ivec2 P,             gvec4 data);\n".
+	\							"void imageStore(gimage2DArray   image, ivec3 P,             gvec4 data);\n".
+	\							"void imageStore(gimageCubeArray image, ivec3 P,             gvec4 data);\n".
+	\							"void imageStore(gimage2DMS      iamge, ivec2 P, int sample, gvec4 data);\n".
+	\							"void imageStore(gimage2DMSArray image, ivec3 P, int sample, gvec4 data);\n\n" },
 	\ { 'kind': 'f',	'word': 'imulExtended(',
 	\					'abbr': 'imulExtended',
-	\					'info': "\/\/ \n" .
-	\							"imulExtended();\n\n" },
+	\					'info': "\/\/ Mulitply two 32 bit integers and generate a 64 bit result.\n" .
+	\							"\/\/ param[in]  x,y: The multiplication factors.\n".
+	\							"\/\/ param[out] msb: The most significant bits of the 64 bit result.\n".
+	\							"\/\/ param[out] lsb: The least significant bits of the 64 bit result.\n".
+	\							"void imulExtended(genIType x, genIType y, out genIType msb, out genIType lsb);\n\n" },
 	\ { 'kind': 'f',	'word': 'intBitsToFloat(',
 	\					'abbr': 'intBitsToFloat',
 	\					'info': "\/\/ Decode a floating point value from an integer. The result is undefined if x\n".
@@ -1137,16 +1243,14 @@ let s:glsl_builtins = [
 	\ { 'kind': 'f',	'word': 'matrixCompMult(',
 	\					'abbr': 'matrixCompMult',
 	\					'info': "\/\/ Multiply two matrices component-wise.\n" .
-	\							"\/\/ param[in] x: The first matrix factor.\n".
-	\							"\/\/ param[in] y: The second matrix fator.\n".
+	\							"\/\/ param[in] x,y: The matrix factors.\n".
 	\							"\/\/ returns   A matrix m, such that m[i] = x[i] * y[i].\n".
 	\							"dmat matrixCompMult(dmat x, dmat y);\n".
 	\							"mat  matrixCompMult(mat  x, mat  y);\n\n" },
 	\ { 'kind': 'f',	'word': 'max(',
 	\					'abbr': 'max',
 	\					'info': "\/\/ Calculate the maximum of two values.\n".
-	\							"\/\/ param[in] x: The first value to compare.\n".
-	\							"\/\/ param[in] y: The second value to compare.\n".
+	\							"\/\/ param[in] x,y: The two values to compare.\n".
 	\							"\/\/ returns   x > y ? x : y\n".
 	\							"genType  max(genType  x, genType  y);\n" .
 	\							"genType  max(genType  x, float    y);\n" .
@@ -1179,8 +1283,7 @@ let s:glsl_builtins = [
 	\ { 'kind': 'f',	'word': 'min(',
 	\					'abbr': 'min',
 	\					'info': "\/\/ Calculate the minimum of two values.\n".
-	\							"\/\/ param[in] x: The first value to compare.\n".
-	\							"\/\/ param[in] y: The second value to compare.\n".
+	\							"\/\/ param[in] x,y: The two values to compare.\n".
 	\							"\/\/ returns   x < y ? x : y\n".
 	\							"genType  min(genType  x, genType  y);\n" .
 	\							"genType  min(genType  x, float    y);\n" .
@@ -1193,9 +1296,8 @@ let s:glsl_builtins = [
 	\ { 'kind': 'f',	'word': 'mix(',
 	\					'abbr': 'mix',
 	\					'info': "\/\/ Linearly interpolate between x and y, by amount a.\n" .
-	\							"\/\/ param[in] x: The lower bound on the range of interpolation.\n".
-	\							"\/\/ param[in] y: The upper bound on the range of interpolation.\n".
-	\							"\/\/ param[in] a: The interpolation value between x and y.\n" .
+	\							"\/\/ param[in] x,y: The bounds on the range of interpolation.\n".
+	\							"\/\/ param[in] a:   The interpolation value between x and y.\n" .
 	\							"\/\/ returns   x(1-a) + ya\n" .
 	\							"genType  mix(genType  x, genType  y, genType  a);\n" .
 	\							"genType  mix(genType  x, genType  y, float    a);\n" .
@@ -1413,9 +1515,8 @@ let s:glsl_builtins = [
 	\							"\/\/     genType t = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);\n" .
 	\							"\/\/     return t * t * (3.0 - 2.0 * t);\n" .
 	\							"\/\/ The result is undefined if edge0 >= edge1.\n" .
-	\							"\/\/ param[in] edge0: The lower bound of the interpolation range.\n".
-	\							"\/\/ param[in] edge1: The upper bound of the interpolation range.\n".
-	\							"\/\/ param[in] x:     The interpolation's source value.\n".
+	\							"\/\/ param[in] edge0,edge1: The bounds of the interpolation range.\n".
+	\							"\/\/ param[in] x:           The interpolation's source value.\n".
 	\							"\/\/ returns   The value of the equations noted above.\n".
 	\							"genType  smoothstep(genType  edge0, genType  edge1, genType  x);\n" .
 	\							"genType  smoothstep(float    edge0, float    edge1, genType  x);\n" .
@@ -1569,8 +1670,12 @@ let s:glsl_builtins = [
 	\							"genDType trunc(genDType x);\n\n" },
 	\ { 'kind': 'f',	'word': 'uaddCarry(',
 	\					'abbr': 'uaddCarry',
-	\					'info': "\/\/ \n" .
-	\							"uaddCarry();\n\n" },
+	\					'info': "\/\/ Add two unsigned integers, returning any carry value.\n" .
+	\							"\/\/ param[in]  x,y:   The two values to add.\n".
+	\							"\/\/ param[out] carry: Any carry value generated by the addition. This is 0 if\n".
+	\							"\/\/                   x + y < 2^32. Otherwise, it is set to 1.\n".
+	\							"\/\/ returns    (x + y) % (2^32)\n".
+	\							"genUType uaddCarry(genUType x, genUType y, out genUType carry);\n\n" },
 	\ { 'kind': 'f',	'word': 'uintBitsToFloat(',
 	\					'abbr': 'uintBitsToFloat',
 	\					'info': "\/\/ Decode a floating point value from an unsigned integer. The result is\n".
@@ -1581,8 +1686,11 @@ let s:glsl_builtins = [
 	\							"genType uintBitsToFloat(genUType x);\n\n" },
 	\ { 'kind': 'f',	'word': 'umulExtended(',
 	\					'abbr': 'umulExtended',
-	\					'info': "\/\/ \n" .
-	\							"umulExtended();\n\n" },
+	\					'info': "\/\/ Mulitply two 32 bit integers and generate a 64 bit result.\n" .
+	\							"\/\/ param[in]  x,y: The multiplication factors.\n".
+	\							"\/\/ param[out] msb: The most significant bits of the 64 bit result.\n".
+	\							"\/\/ param[out] lsb: The least significant bits of the 64 bit result.\n".
+	\							"void umulExtended(genUType x, genUType y, out genUType msb, out genUType lsb);\n\n" },
 	\ { 'kind': 'f',	'word': 'unpackDouble2x32(',
 	\					'abbr': 'unpackDouble2x32',
 	\					'info': "\/\/ Unpack 2 unsigned integers from a double precision value. The first\n".
@@ -1636,8 +1744,13 @@ let s:glsl_builtins = [
 	\							"vec4 unpackUnorm4x8(uint p);\n\n" },
 	\ { 'kind': 'f',	'word': 'usubBorrow(',
 	\					'abbr': 'usubBorrow',
-	\					'info': "\/\/ \n" .
-	\							"usubBorrow();\n\n" },
+	\					'info': "\/\/ Subtract two unsigned integers, and output any borrowing value.\n" .
+	\							"\/\/ param[in]  x,y:    The subtraction operations.\n".
+	\							"\/\/ param[out] borrow: Any borrowing value generated by the subtraction. If\n".
+	\							"\/\/                    y <= x, borrow is set to 0. Otherwise it is set to 1.\n".
+	\							"\/\/ returns    if (y <= 0) x - y\n".
+	\							"\/\/            else        (2^32) + x - y\n".
+	\							"genUType usubBorrow(genUType x, genUType y, out genUType borrow);\n\n" },
 	\ { 'kind': 'f',	'word': 'contained(',
 	\					'abbr': 'contained',
 	\					'info': "\/\/ \n" .
