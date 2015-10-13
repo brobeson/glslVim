@@ -1463,8 +1463,16 @@ let s:glsl_builtins = [
 	\							"texelFetchOffset();\n\n" },
 	\ { 'kind': 'f',	'word': 'texture(',
 	\					'abbr': 'texture',
-	\					'info': "\/\/ \n" .
-	\							"texture();\n\n" },
+	\					'info': "\/\/ Get texels from a texture.\n" .
+	\							"\/\/ param[in] sampler: The sampler to which the texture is bound.\n".
+	\							"\/\/ param[in] P:       The texture coordinates at which to to sample.\n".
+	\							"\/\/ param[in] bias:    A bias value to be applied to LoD calculation.\n".
+	\							"\/\/ param[in] compare: The value to which the texel will be compared.\n".
+	\							"gvec4 texture(gsampler{1D[Array],2D[Array,Rect],3D,Cube[Array]} sampler,\n".
+	\							"              {float,vec2,vec3,vec4} P [, float bias]);\n".
+	\							"float texture(sampler{1D[Array],2D[Array,Rect],Cube}Shadow sampler,\n".
+	\							"              {vec3,vec4} P [, float bias]);\n".
+	\							"float texture(gsamplerCubeArrayShadow sampler, vec4 P, float compare);\n\n" },
 	\ { 'kind': 'f',	'word': 'textureGather(',
 	\					'abbr': 'textureGather',
 	\					'info': "\/\/ \n" .
@@ -1499,8 +1507,14 @@ let s:glsl_builtins = [
 	\							"textureOffset();\n\n" },
 	\ { 'kind': 'f',	'word': 'textureProj(',
 	\					'abbr': 'textureProj',
-	\					'info': "\/\/ \n" .
-	\							"textureProj();\n\n" },
+	\					'info': "\/\/ Get a texel from texture by projecting the given coordinates.\n" .
+	\							"\/\/ param[in] sampler: The sampler to which the texture is bound.\n".
+	\							"\/\/ param[in] P:       The texture coordinates at which to to sample.\n".
+	\							"\/\/ param[in] bias:    A bias value to be applied to LoD calculation.\n".
+	\							"\/\/ returns   The texel value for the given texture, at the given coordinates.\n".
+	\							"gvec4 textureProj(gsampler{1D,2D[Rect],3D} sampler,\n".
+	\							"                  {vec2,vec3,vec4} P [, float bias]);\n".
+	\							"float textureProj(sampler{1D,2D[Rect]}Shadow sampler, vec4 P [, float bias]);\n\n" },
 	\ { 'kind': 'f',	'word': 'textureProjGrad(',
 	\					'abbr': 'textureProjGrad',
 	\					'info': "\/\/ \n" .
@@ -1523,16 +1537,27 @@ let s:glsl_builtins = [
 	\							"textureProjOffset();\n\n" },
 	\ { 'kind': 'f',	'word': 'textureQueryLod(',
 	\					'abbr': 'textureQueryLod',
-	\					'info': "\/\/ \n" .
-	\							"textureQueryLod();\n\n" },
+	\					'info': "\/\/ Get the level of detail which would be used to sample a texture.\n" .
+	\							"\/\/ param[in] sampler: The sampler to which the texture is bound.\n".
+	\							"\/\/ param[in] P:       The texture coordinates at which to get the LoD.\n".
+	\							"\/\/ returns   (mipmap array, level of detail)\n".
+	\							"vec2 textureQueryLod(gsampler{1D[Array],2D[Array],3D,Cube[Array]} sampler,\n".
+	\							"                     {float,vec2,vec3} P);\n".
+	\							"vec2 textureQueryLod(sampler{1D[Array],2D[Array],Cube[Array]}Shadow sampler,\n".
+	\							"                     {float,vec2,vec3} P);\n\n" },
 	\ { 'kind': 'f',	'word': 'textureQueryLevels(',
 	\					'abbr': 'textureQueryLevels',
-	\					'info': "\/\/ \n" .
-	\							"textureQueryLevels();\n\n" },
+	\					'info': "\/\/ Get the number of mipmap levels of a texture.\n" .
+	\							"\/\/ param[in] sampler: The sampler to which the texture is bound.\n".
+	\							"\/\/ returns   The number of mipmap levels accessible in the specified texture.\n".
+	\							"int textureQueryLevels(gsampler{1D[Array],2D[Array],3D,Cube[Array]} sampler);\n".
+	\							"int textureQueryLevels(sampler{1D[Array],2D[Array],Cube[Array]}Shadow sampler);\n\n" },
 	\ { 'kind': 'f',	'word': 'textureSamples(',
 	\					'abbr': 'textureSamples',
-	\					'info': "\/\/ \n" .
-	\							"textureSamples();\n\n" },
+	\					'info': "\/\/ Get the number of samples per texel for a texture.\n" .
+	\							"\/\/ param[in] sampler: The sampler to which the texture is bound.\n".
+	\							"int textureSamples(gsampler2DMS sampler);\n".
+	\							"int textureSamples(gsampler2DMSArray sampler);\n\n" },
 	\ { 'kind': 'f',	'word': 'textureSize(',
 	\					'abbr': 'textureSize',
 	\					'info': "\/\/ \n" .
