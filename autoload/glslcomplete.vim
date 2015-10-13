@@ -701,7 +701,7 @@ let s:glsl_builtins = [
 	\ { 'kind': 'f',	'word': 'barrier(',
 	\					'abbr': 'barrier',
 	\					'info': "\/\/ Synchronize execution of multiple shader invocations. This operation is\n".
-	\							"\/\/ only available to tessallation control and compute shaders.\n" .
+	\							"\/\/ only available in tessallation control and compute shaders.\n" .
 	\							"void barrier();\n\n" },
 	\ { 'kind': 'f',	'word': 'bitCount(',
 	\					'abbr': 'bitCount',
@@ -758,9 +758,8 @@ let s:glsl_builtins = [
 	\ { 'kind': 'f',	'word': 'clamp(',
 	\					'abbr': 'clamp',
 	\					'info': "\/\/ Constrain a value to a specific range.\n" .
-	\							"\/\/ param[in] x:      The value to constrain.\n".
-	\							"\/\/ param[in] minVal: The lower bound of the range.\n".
-	\							"\/\/ param[in] maxVal: The upper bound of the range.\n".
+	\							"\/\/ param[in] x:             The value to constrain.\n".
+	\							"\/\/ param[in] minVal,maxVal: The bounds of the range.\n".
 	\							"\/\/ returns   min(max(x, minVal), maxVal);\n".
 	\							"genType  clamp(genType  x, genType  minVal, genType  maxVal);\n" .
 	\							"genType  clamp(genType  x, float    minVal, float    maxVal);\n" .
@@ -785,8 +784,7 @@ let s:glsl_builtins = [
 	\ { 'kind': 'f',	'word': 'cross(',
 	\					'abbr': 'cross',
 	\					'info': "\/\/ Calculate the cross product of two vectors.\n" .
-	\							"\/\/ param[in] x: The first vector for the cross product operation.\n".
-	\							"\/\/ param[in] y: The second vector for the cross product operation.\n".
+	\							"\/\/ param[in] x,y: The vectors for the cross product operation.\n".
 	\							"\/\/ returns   (x.y)(y.z) - (x.z)(y.y)\n".
 	\							"\/\/           (x.z)(y.x) - (x.x)(y.z)\n".
 	\							"\/\/           (x.x)(y.y) - (x.y)(y.x)\n".
@@ -811,60 +809,98 @@ let s:glsl_builtins = [
 	\							"double determinant(dmat4 m);\n\n" },
 	\ { 'kind': 'f',	'word': 'dFdx(',
 	\					'abbr': 'dFdx',
-	\					'info': "\/\/ \n" .
-	\							"dFdx();\n\n" },
+	\					'info': "\/\/ Calculate the partial derivative of p with respect to the window's x\n".
+	\							"\/\/ coordinate. This function is only available to fragment shaders. Higher\n".
+	\							"\/\/ order and mixed order derivatives are undefined.\n".
+	\							"\/\/ param[in] p: The value of which to take the derivative. This value should\n".
+	\							"\/\/              be continuous.\n".
+	\							"\/\/ returns   The first partial derivative p with respect to x.\n".
+	\							"genType dFdx(genType p);\n\n" },
 	\ { 'kind': 'f',	'word': 'dFdxCoarse(',
 	\					'abbr': 'dFdxCoarse',
-	\					'info': "\/\/ \n" .
-	\							"dFdxCoarse();\n\n" },
+	\					'info': "\/\/ Calculate the partial derivative of p with respect to the window's x\n".
+	\							"\/\/ coordinate. This function may calculate derivatives for fewer unique\n".
+	\							"\/\/ locations within for a particular area. This function is only available to\n".
+	\							"\/\/ fragment shaders. Higher order and mixed order derivatives are undefined.\n".
+	\							"\/\/ param[in] p: The value of which to take the derivative. This value should\n".
+	\							"\/\/              be continuous.\n".
+	\							"\/\/ returns   The first partial derivative p with respect to x.\n".
+	\							"genType dFdxCoarse(genType p);\n\n" },
 	\ { 'kind': 'f',	'word': 'dFdxFine(',
 	\					'abbr': 'dFdxFine',
-	\					'info': "\/\/ \n" .
-	\							"dFdxFine();\n\n" },
+	\					'info': "\/\/ Calculate the partial derivative of p with respect to the window's x\n".
+	\							"\/\/ coordinate. This function uses the difference between p for the current\n".
+	\							"\/\/ fragment and that of it's neighbors.  This function is only available to\n"
+	\							"\/\/ fragment shaders. Higher order and mixed order derivatives are undefined.\n".
+	\							"\/\/ param[in] p: The value of which to take the derivative. This value should\n".
+	\							"\/\/              be continuous.\n".
+	\							"\/\/ returns   The first partial derivative p with respect to x.\n".
+	\							"genType dFdxFine(genType p);\n\n" },
 	\ { 'kind': 'f',	'word': 'dFdy(',
 	\					'abbr': 'dFdy',
-	\					'info': "\/\/ \n" .
-	\							"dFdy();\n\n" },
+	\					'info': "\/\/ Calculate the partial derivative of p with respect to the window's y\n".
+	\							"\/\/ coordinate. This function is only available to fragment shaders. Higher\n".
+	\							"\/\/ order and mixed order derivatives are undefined.\n".
+	\							"\/\/ param[in] p: The value of which to take the derivative. This value should\n".
+	\							"\/\/              be continuous.\n".
+	\							"\/\/ returns   The first partial derivative p with respect to y.\n".
+	\							"genType dFdy(genType p);\n\n" },
 	\ { 'kind': 'f',	'word': 'dFdyCoarse(',
 	\					'abbr': 'dFdyCoarse',
-	\					'info': "\/\/ \n" .
-	\							"dFdyCoarse();\n\n" },
+	\					'info': "\/\/ Calculate the partial derivative of p with respect to the window's y\n".
+	\							"\/\/ coordinate. This function may calculate derivatives for fewer unique\n".
+	\							"\/\/ locations within for a particular area. This function is only available to\n".
+	\							"\/\/ fragment shaders. Higher order and mixed order derivatives are undefined.\n".
+	\							"\/\/ param[in] p: The value of which to take the derivative. This value should\n".
+	\							"\/\/              be continuous.\n".
+	\							"\/\/ returns   The first partial derivative p with respect to y.\n".
+	\							"genType dFdyCoarse(genType p);\n\n" },
 	\ { 'kind': 'f',	'word': 'dFdyFine(',
 	\					'abbr': 'dFdyFine',
-	\					'info': "\/\/ \n" .
-	\							"dFdyFine();\n\n" },
+	\					'info': "\/\/ Calculate the partial derivative of p with respect to the window's y\n".
+	\							"\/\/ coordinate. This function uses the difference between p for the current\n".
+	\							"\/\/ fragment and that of it's neighbors.  This function is only available to\n"
+	\							"\/\/ fragment shaders. Higher order and mixed order derivatives are undefined.\n".
+	\							"\/\/ param[in] p: The value of which to take the derivative. This value should\n".
+	\							"\/\/              be continuous.\n".
+	\							"\/\/ returns   The first partial derivative p with respect to y.\n".
+	\							"genType dFdyFine(genType p);\n\n" },
 	\ { 'kind': 'f',	'word': 'distance(',
 	\					'abbr': 'distance',
 	\					'info': "\/\/ Calculate the distance between two points.\n".
-	\							"\/\/ param[in] p0: The first point for the distance calculation.\n".
-	\							"\/\/ param[in] p1: The second point for the distance calculation.\n".
+	\							"\/\/ param[in] p0,p1: The points for the distance calculation.\n".
 	\							"\/\/ returns   length(p1 - p0)\n" .
 	\							"double distance(genDType p0, genDType p1);\n".
 	\							"float  distance(genType  p0, genType  p1);\n\n" },
 	\ { 'kind': 'f',	'word': 'dot(',
 	\					'abbr': 'dot',
 	\					'info': "\/\/ Calculate the dot product of two vectors.\n" .
-	\							"\/\/ param[in] x: The first vector for the dot product operation\n".
-	\							"\/\/ param[in] y: The second vector for the dot product operation\n".
+	\							"\/\/ param[in] x,y: The vectors for the dot product operation.\n".
 	\							"\/\/ returns   (x.x)(y.x) + (x.y)(y.y) + ...\n".
 	\							"float  dot(genType  x, genType  y);\n".
 	\							"double dot(genDType x, genDType y);\n\n" },
 	\ { 'kind': 'f',	'word': 'EmitStreamVertex(',
 	\					'abbr': 'EmitStreamVertex',
-	\					'info': "\/\/ \n" .
-	\							"EmitStreamVertex();\n\n" },
+	\					'info': "\/\/ Emit a vertex to the specified stream. This function is only available in\n" .
+	\							"\/\/ geometry shaders.\n".
+	\							"\/\/ param[in] stream: The stream to which the vertex is emitted.\n".
+	\							"void EmitStreamVertex(int stream);\n\n" },
 	\ { 'kind': 'f',	'word': 'EmitVertex(',
 	\					'abbr': 'EmitVertex',
-	\					'info': "\/\/ \n" .
-	\							"EmitVertex();\n\n" },
+	\					'info': "\/\/ Emit a vertex to the first stream. This function is only available in\n" .
+	\							"\/\/ geometry shaders.\n".
+	\							"void EmitVertex();\n\n" },
 	\ { 'kind': 'f',	'word': 'EndPrimitive(',
 	\					'abbr': 'EndPrimitive',
-	\					'info': "\/\/ \n" .
-	\							"EndPrimitive();\n\n" },
+	\					'info': "\/\/ Complete the current output primitive for the first stream. This function\n" .
+	\							"\/\/ is only available in geometry shaders.\n".
+	\							"void EndPrimitive();\n\n" },
 	\ { 'kind': 'f',	'word': 'EndStreamPrimitive(',
 	\					'abbr': 'EndStreamPrimitive',
-	\					'info': "\/\/ \n" .
-	\							"EndStreamPrimitive();\n\n" },
+	\					'info': "\/\/ Complete the current output primitive for a specific stream. This function\n" .
+	\							"\/\/ is only available in geometry shaders.\n".
+	\							"\/\/ param[in] stream: The stream in which to end the current primitive.\n".
+	\							"void EndStreamPrimitive(int stream);\n\n" },
 	\ { 'kind': 'f',	'word': 'equal(',
 	\					'abbr': 'equal',
 	\					'info': "\/\/ Compare two vectors, component-wise.\n" .
@@ -897,10 +933,21 @@ let s:glsl_builtins = [
 	\							"genDType faceforward(genDType N, genDType I, genDType Nref);\n\n" },
 	\ { 'kind': 'f',	'word': 'findLSB(',
 	\					'abbr': 'findLSB',
-	\					'info': "\/\/ \n" .
-	\							"findLSB();\n\n" },
+	\					'info': "\/\/ Find the index of the least significant bit set to 1.\n" .
+	\							"\/\/ param[in] value: The integer to search for the LSB.\n".
+	\							"\/\/ returns   The index of the least significant bit that is 1. If value is 0,\n".
+	\							"\/\/           -1 is returned.\n".
+	\							"genIType findLSB(genIType value);\n".
+	\							"genUType findLSB(genUType value);\n\n" },
 	\ { 'kind': 'f',	'word': 'findMSB(',
 	\					'abbr': 'findMSB',
+	\					'info': "\/\/ Find the index of the most significant bit set to 1.\n" .
+	\							"\/\/ param[in] value: The integer to search for the MSB.\n".
+	\							"\/\/ returns   If value is positive, the index of the most significant bit that\n".
+	\							"\/\/           is 1. If value is 0, -1 is returned. If value is negative, the\n".
+	\							"\/\/           most significant bit that is set to 0.\n".
+	\							"genIType findMSB(genIType value);\n".
+	\							"genUType findMSB(genUType value);\n\n" },
 	\					'info': "\/\/ \n" .
 	\							"findMSB();\n\n" },
 	\ { 'kind': 'f',	'word': 'floatBitsToInt(',
@@ -955,16 +1002,25 @@ let s:glsl_builtins = [
 	\							"genDType frexp(genDType x, out genIType exp);\n\n" },
 	\ { 'kind': 'f',	'word': 'fwidth(',
 	\					'abbr': 'fwidth',
-	\					'info': "\/\/ \n" .
-	\							"fwidth();\n\n" },
+	\					'info': "\/\/ Calculate the sum of the absolute values of the derivatives with respect to\n" .
+	\							"\/\/ x and y. This function is only available in the fragment shader.\n".
+	\							"\/\/ param[in] p: The value for which to take the derivative.\n".
+	\							"\/\/ returns   abs(dFdx(p)) + abs(dFdy(p))\n".
+	\							"genType fwidth(genType p);\n\n" },
 	\ { 'kind': 'f',	'word': 'fwidthCoarse(',
 	\					'abbr': 'fwidthCoarse',
-	\					'info': "\/\/ \n" .
-	\							"fwidthCoarse();\n\n" },
+	\					'info': "\/\/ Calculate the sum of the absolute values of the derivatives with respect to\n" .
+	\							"\/\/ x and y. This function is only available in the fragment shader.\n".
+	\							"\/\/ param[in] p: The value for which to take the derivative.\n".
+	\							"\/\/ returns   abs(dFdxCoarse(p)) + abs(dFdyCoarse(p))\n".
+	\							"genType fwidthCoarse(genType p);\n\n" },
 	\ { 'kind': 'f',	'word': 'fwidthFine(',
 	\					'abbr': 'fwidthFine',
-	\					'info': "\/\/ \n" .
-	\							"fwidthFine();\n\n" },
+	\					'info': "\/\/ Calculate the sum of the absolute values of the derivatives with respect to\n" .
+	\							"\/\/ x and y. This function is only available in the fragment shader.\n".
+	\							"\/\/ param[in] p: The value for which to take the derivative.\n".
+	\							"\/\/ returns   abs(dFdxFine(p)) + abs(dFdyFine(p))\n".
+	\							"genType fwidthFine(genType p);\n\n" },
 	\ { 'kind': 'f',	'word': 'greaterThan(',
 	\					'abbr': 'greaterThan',
 	\					'info': "\/\/ Compare two vectors, component-wise.\n" .
@@ -983,60 +1039,337 @@ let s:glsl_builtins = [
 	\							"bvec greaterThanEqual(uvec x, uvec y);\n\n" },
 	\ { 'kind': 'f',	'word': 'groupMemoryBarrier(',
 	\					'abbr': 'groupMemoryBarrier',
-	\					'info': "\/\/ \n" .
-	\							"groupMemoryBarrier();\n\n" },
+	\					'info': "\/\/ Wait for all memory accesses by an invocation of a compute shader, relative\n" .
+	\							"\/\/ to the same accesses by other invocations in the same work group.\n".
+	\							"void groupMemoryBarrier();\n\n" },
 	\ { 'kind': 'f',	'word': 'imageAtomicAdd(',
 	\					'abbr': 'imageAtomicAdd',
-	\					'info': "\/\/ \n" .
-	\							"imageAtomicAdd();\n\n" },
+	\					'info': "\/\/ Atomically add to an image pixel.\n" .
+	\							"\/\/ param[in] image:  The image unit to which to add.\n".
+	\							"\/\/ param[in] P:      The coordinates of the pixel to which to add.\n".
+	\							"\/\/ param[in] sample: The sample in the image to which to add.\n".
+	\							"\/\/ param[in] data:   The value to add to the image.\n".
+	\							"\/\/ returns   The original pixel value of the image.\n".
+	\							"uint imageAtomicAdd(gimage1D        image, int   P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimage2D        image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimage3D        image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimage2DRect    image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimageCube      image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gbufferImage    image, int   P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimage1DArray   image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimage2DArray   image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimageCubeArray image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAdd(gimage2DMS      image, ivec2 P, int sample, uint data);\n".
+	\							"uint imageAtomicAdd(gimage2DMSArray image, ivec3 P, int sample, uint data);\n".
+	\							"int  imageAtomicAdd(gimage1D        image, int   P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimage2D        image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimage3D        image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimage2DRect    image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimageCube      image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gbufferImage    image, int   P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimage1DArray   image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimage2DArray   image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimageCubeArray image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAdd(gimage2DMS      image, ivec2 P, int sample, int  data);\n".
+	\							"int  imageAtomicAdd(gimage2DMSArray image, ivec3 P, int sample, int  data);\n" },
 	\ { 'kind': 'f',	'word': 'imageAtomicAnd(',
 	\					'abbr': 'imageAtomicAnd',
-	\					'info': "\/\/ \n" .
-	\							"imageAtomicAnd();\n\n" },
+	\					'info': "\/\/ Atomically calculate the logical AND of an image pixel value with an input\n".
+	\							"\/\/ value. The result is written to the image. The pixel's original value is\n".
+	\							"\/\/ returned.\n" .
+	\							"\/\/ param[in] image:  The image unit used for the operation.\n".
+	\							"\/\/ param[in] P:      The coordinate of the pixel used for the operation.\n".
+	\							"\/\/ param[in] sample: The sample in the image used for the operation.\n".
+	\							"\/\/ param[in] data:   The value to AND with the pixel data.\n".
+	\							"\/\/ returns   The original value of the image pixel.\n".
+	\							"uint imageAtomicAnd(gimage1D        image, int   P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimage2D        image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimage3D        image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimage2DRect    image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimageCube      image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gbufferImage    image, int   P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimage1DArray   image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimage2DArray   image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimageCubeArray image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicAnd(gimage2DMS      image, ivec2 P, int sample, uint data);\n".
+	\							"uint imageAtomicAnd(gimage2DMSArray image, ivec3 P, int sample, uint data);\n".
+	\							"int  imageAtomicAnd(gimage1D        image, int   P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimage2D        image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimage3D        image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimage2DRect    image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimageCube      image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gbufferImage    image, int   P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimage1DArray   image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimage2DArray   image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimageCubeArray image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicAnd(gimage2DMS      image, ivec2 P, int sample, int  data);\n".
+	\							"int  imageAtomicAnd(gimage2DMSArray image, ivec3 P, int sample, int  data);\n" },
 	\ { 'kind': 'f',	'word': 'imageAtomicCompSwap(',
 	\					'abbr': 'imageAtomicCompSwap',
-	\					'info': "\/\/ \n" .
-	\							"imageAtomicCompSwap();\n\n" },
+	\					'info': "\/\/ Atomically compare the value of compare with the specified image pixel. If\n" .
+	\							"\/\/ the two are equal, then the value of data is written to the pixel. The\n".
+	\							"\/\/ pixel's original value is returned.\n".
+	\							"\/\/ param[in] image:   The image unit used for the operation.\n".
+	\							"\/\/ param[in] P:       The coordinate of the pixel used for the operation.\n".
+	\							"\/\/ param[in] compare: The value to compare with the pixel.\n".
+	\							"\/\/ param[in] sample:  The sample in the image used for the operation.\n".
+	\							"\/\/ param[in] data:    The value to AND with the pixel data.\n".
+	\							"\/\/ returns   The original value of the image pixel.\n".
+	\							"uint imageAtomicCompSwap(gimage1D        image, int   P, uint compare,             uint data);\n".
+	\							"uint imageAtomicCompSwap(gimage2D        image, ivec2 P, uint compare,             uint data);\n".
+	\							"uint imageAtomicCompSwap(gimage3D        image, ivec3 P, uint compare,             uint data);\n".
+	\							"uint imageAtomicCompSwap(gimage2DRect    image, ivec2 P, uint compare,             uint data);\n".
+	\							"uint imageAtomicCompSwap(gimageCube      image, ivec3 P, uint compare,             uint data);\n".
+	\							"uint imageAtomicCompSwap(gbufferImage    image, int   P, uint compare,             uint data);\n".
+	\							"uint imageAtomicCompSwap(gimage1DArray   image, ivec2 P, uint compare,             uint data);\n".
+	\							"uint imageAtomicCompSwap(gimage2DArray   image, ivec3 P, uint compare,             uint data);\n".
+	\							"uint imageAtomicCompSwap(gimageCubeArray image, ivec3 P, uint compare,             uint data);\n".
+	\							"uint imageAtomicCompSwap(gimage2DMS      image, ivec2 P, uint compare, int sample, uint data);\n".
+	\							"uint imageAtomicCompSwap(gimage2DMSArray image, ivec3 P, uint compare, int sample, uint data);\n".
+	\							"int  imageAtomicCompSwap(gimage1D        image, int   P, int  compare,             int  data);\n".
+	\							"int  imageAtomicCompSwap(gimage2D        image, ivec2 P, int  compare,             int  data);\n".
+	\							"int  imageAtomicCompSwap(gimage3D        image, ivec3 P, int  compare,             int  data);\n".
+	\							"int  imageAtomicCompSwap(gimage2DRect    image, ivec2 P, int  compare,             int  data);\n".
+	\							"int  imageAtomicCompSwap(gimageCube      image, ivec3 P, int  compare,             int  data);\n".
+	\							"int  imageAtomicCompSwap(gbufferImage    image, int   P, int  compare,             int  data);\n".
+	\							"int  imageAtomicCompSwap(gimage1DArray   image, ivec2 P, int  compare,             int  data);\n".
+	\							"int  imageAtomicCompSwap(gimage2DArray   image, ivec3 P, int  compare,             int  data);\n".
+	\							"int  imageAtomicCompSwap(gimageCubeArray image, ivec3 P, int  compare,             int  data);\n".
+	\							"int  imageAtomicCompSwap(gimage2DMS      image, ivec2 P, int  compare, int sample, int  data);\n".
+	\							"int  imageAtomicCompSwap(gimage2DMSArray image, ivec3 P, int  compare, int sample, int  data);\n" },
 	\ { 'kind': 'f',	'word': 'imageAtomicExchange(',
 	\					'abbr': 'imageAtomicExchange',
-	\					'info': "\/\/ \n" .
-	\							"imageAtomicExchange();\n\n" },
+	\					'info': "\/\/ Atomically write a value to an image pixel. The original pixel value is\n".
+	\							"\/\/ returned.\n".
+	\							"\/\/ param[in] image:  The image unit used for the operation.\n".
+	\							"\/\/ param[in] P:      The coordinates of the pixel used for the operation.\n".
+	\							"\/\/ param[in] sample: The sample in the image used for the operation.\n".
+	\							"\/\/ param[in] data:   The value to compare with the image pixel.\n".
+	\							"\/\/ returns   The original image pixel value.\n".
+	\							"uint imageAtomicExchange(gimage1D        image, int   P,             uint  data);\n".
+	\							"uint imageAtomicExchange(gimage2D        image, ivec2 P,             uint  data);\n".
+	\							"uint imageAtomicExchange(gimage3D        image, ivec3 P,             uint  data);\n".
+	\							"uint imageAtomicExchange(gimage2DRect    image, ivec2 P,             uint  data);\n".
+	\							"uint imageAtomicExchange(gimageCube      image, ivec3 P,             uint  data);\n".
+	\							"uint imageAtomicExchange(gbufferImage    image, int   P,             uint  data);\n".
+	\							"uint imageAtomicExchange(gimage1DArray   image, ivec2 P,             uint  data);\n".
+	\							"uint imageAtomicExchange(gimage2DArray   image, ivec3 P,             uint  data);\n".
+	\							"uint imageAtomicExchange(gimageCubeArray image, ivec3 P,             uint  data);\n".
+	\							"uint imageAtomicExchange(gimage2DMS      image, ivec2 P, int sample, uint  data);\n".
+	\							"uint imageAtomicExchange(gimage2DMSArray image, ivec3 P, int sample, uint  data);\n".
+	\							"int  imageAtomicExchange(gimage1D        image, int   P,             int   data);\n".
+	\							"int  imageAtomicExchange(gimage2D        image, ivec2 P,             int   data);\n".
+	\							"int  imageAtomicExchange(gimage3D        image, ivec3 P,             int   data);\n".
+	\							"int  imageAtomicExchange(gimage2DRect    image, ivec2 P,             int   data);\n".
+	\							"int  imageAtomicExchange(gimageCube      image, ivec3 P,             int   data);\n".
+	\							"int  imageAtomicExchange(gbufferImage    image, int   P,             int   data);\n".
+	\							"int  imageAtomicExchange(gimage1DArray   image, ivec2 P,             int   data);\n".
+	\							"int  imageAtomicExchange(gimage2DArray   image, ivec3 P,             int   data);\n".
+	\							"int  imageAtomicExchange(gimageCubeArray image, ivec3 P,             int   data);\n".
+	\							"int  imageAtomicExchange(gimage2DMS      image, ivec2 P, int sample, int   data);\n".
+	\							"int  imageAtomicExchange(gimage2DMSArray image, ivec3 P, int sample, int   data);\n".
+	\							"int  imageAtomicExchange(gimage1D        image, int   P,             float data);\n".
+	\							"int  imageAtomicExchange(gimage2D        image, ivec2 P,             float data);\n".
+	\							"int  imageAtomicExchange(gimage3D        image, ivec3 P,             float data);\n".
+	\							"int  imageAtomicExchange(gimage2DRect    image, ivec2 P,             float data);\n".
+	\							"int  imageAtomicExchange(gimageCube      image, ivec3 P,             float data);\n".
+	\							"int  imageAtomicExchange(gbufferImage    image, int   P,             float data);\n".
+	\							"int  imageAtomicExchange(gimage1DArray   image, ivec2 P,             float data);\n".
+	\							"int  imageAtomicExchange(gimage2DArray   image, ivec3 P,             float data);\n".
+	\							"int  imageAtomicExchange(gimageCubeArray image, ivec3 P,             float data);\n".
+	\							"int  imageAtomicExchange(gimage2DMS      image, ivec2 P, int sample, float data);\n".
+	\							"int  imageAtomicExchange(gimage2DMSArray image, ivec3 P, int sample, float data);\n\n" },
 	\ { 'kind': 'f',	'word': 'imageAtomicMax(',
 	\					'abbr': 'imageAtomicMax',
-	\					'info': "\/\/ \n" .
-	\							"imageAtomicMax();\n\n" },
+	\					'info': "\/\/ Atomically calculate the maximum of a given value, and an image pixel. The\n" .
+	\							"\/\/ maximum is written to the image and the original pixel value is returned.\n".
+	\							"\/\/ param[in] image:  The image unit used for the operation.\n".
+	\							"\/\/ param[in] P:      The coordinates of the pixel used for the operation.\n".
+	\							"\/\/ param[in] sample: The sample in the image used for the operation.\n".
+	\							"\/\/ param[in] data:   The value to compare with the image pixel.\n".
+	\							"\/\/ returns   The original image pixel value.\n".
+	\							"uint imageAtomicMax(gimage1D        image, int   P,             uint data);\n".
+	\							"uint imageAtomicMax(gimage2D        image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicMax(gimage3D        image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicMax(gimage2DRect    image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicMax(gimageCube      image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicMax(gbufferImage    image, int   P,             uint data);\n".
+	\							"uint imageAtomicMax(gimage1DArray   image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicMax(gimage2DArray   image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicMax(gimageCubeArray image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicMax(gimage2DMS      image, ivec2 P, int sample, uint data);\n".
+	\							"uint imageAtomicMax(gimage2DMSArray image, ivec3 P, int sample, uint data);\n".
+	\							"int  imageAtomicMax(gimage1D        image, int   P,             int  data);\n".
+	\							"int  imageAtomicMax(gimage2D        image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicMax(gimage3D        image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicMax(gimage2DRect    image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicMax(gimageCube      image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicMax(gbufferImage    image, int   P,             int  data);\n".
+	\							"int  imageAtomicMax(gimage1DArray   image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicMax(gimage2DArray   image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicMax(gimageCubeArray image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicMax(gimage2DMS      image, ivec2 P, int sample, int  data);\n".
+	\							"int  imageAtomicMax(gimage2DMSArray image, ivec3 P, int sample, int  data);\n\n" },
 	\ { 'kind': 'f',	'word': 'imageAtomicMin(',
 	\					'abbr': 'imageAtomicMin',
-	\					'info': "\/\/ \n" .
-	\							"imageAtomicMin();\n\n" },
+	\					'info': "\/\/ Atomically calculate the minimum of a given value, and an image pixel. The\n" .
+	\							"\/\/ minimum is written to the image and the original pixel value is returned.\n".
+	\							"\/\/ param[in] image:  The image unit used for the operation.\n".
+	\							"\/\/ param[in] P:      The coordinates of the pixel used for the operation.\n".
+	\							"\/\/ param[in] sample: The sample in the image used for the operation.\n".
+	\							"\/\/ param[in] data:   The value to compare with the image pixel.\n".
+	\							"\/\/ returns   The original image pixel value.\n".
+	\							"uint imageAtomicMin(gimage1D        image, int   P,             uint data);\n".
+	\							"uint imageAtomicMin(gimage2D        image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicMin(gimage3D        image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicMin(gimage2DRect    image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicMin(gimageCube      image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicMin(gbufferImage    image, int   P,             uint data);\n".
+	\							"uint imageAtomicMin(gimage1DArray   image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicMin(gimage2DArray   image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicMin(gimageCubeArray image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicMin(gimage2DMS      image, ivec2 P, int sample, uint data);\n".
+	\							"uint imageAtomicMin(gimage2DMSArray image, ivec3 P, int sample, uint data);\n".
+	\							"int  imageAtomicMin(gimage1D        image, int   P,             int  data);\n".
+	\							"int  imageAtomicMin(gimage2D        image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicMin(gimage3D        image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicMin(gimage2DRect    image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicMin(gimageCube      image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicMin(gbufferImage    image, int   P,             int  data);\n".
+	\							"int  imageAtomicMin(gimage1DArray   image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicMin(gimage2DArray   image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicMin(gimageCubeArray image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicMin(gimage2DMS      image, ivec2 P, int sample, int  data);\n".
+	\							"int  imageAtomicMin(gimage2DMSArray image, ivec3 P, int sample, int  data);\n\n" },
 	\ { 'kind': 'f',	'word': 'imageAtomicOr(',
 	\					'abbr': 'imageAtomicOr',
-	\					'info': "\/\/ \n" .
-	\							"imageAtomicOr();\n\n" },
+	\					'info': "\/\/ Atomically calculate the logical OR of an image pixel value with an input\n".
+	\							"\/\/ value. The result is written to the image. The pixel's original value is\n".
+	\							"\/\/ returned.\n" .
+	\							"\/\/ param[in] image:  The image unit used for the operation.\n".
+	\							"\/\/ param[in] P:      The coordinate of the pixel used for the operation.\n".
+	\							"\/\/ param[in] sample: The sample in the image used for the operation.\n".
+	\							"\/\/ param[in] data:   The value to OR with the pixel data.\n".
+	\							"\/\/ returns   The original value of the image pixel.\n".
+	\							"uint imageAtomicOr(gimage1D        image, int   P,             uint data);\n".
+	\							"uint imageAtomicOr(gimage2D        image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicOr(gimage3D        image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicOr(gimage2DRect    image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicOr(gimageCube      image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicOr(gbufferImage    image, int   P,             uint data);\n".
+	\							"uint imageAtomicOr(gimage1DArray   image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicOr(gimage2DArray   image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicOr(gimageCubeArray image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicOr(gimage2DMS      image, ivec2 P, int sample, uint data);\n".
+	\							"uint imageAtomicOr(gimage2DMSArray image, ivec3 P, int sample, uint data);\n".
+	\							"int  imageAtomicOr(gimage1D        image, int   P,             int  data);\n".
+	\							"int  imageAtomicOr(gimage2D        image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicOr(gimage3D        image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicOr(gimage2DRect    image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicOr(gimageCube      image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicOr(gbufferImage    image, int   P,             int  data);\n".
+	\							"int  imageAtomicOr(gimage1DArray   image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicOr(gimage2DArray   image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicOr(gimageCubeArray image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicOr(gimage2DMS      image, ivec2 P, int sample, int  data);\n".
+	\							"int  imageAtomicOr(gimage2DMSArray image, ivec3 P, int sample, int  data);\n" },
 	\ { 'kind': 'f',	'word': 'imageAtomicXor(',
 	\					'abbr': 'imageAtomicXor',
-	\					'info': "\/\/ \n" .
-	\							"imageAtomicXor();\n\n" },
+	\					'info': "\/\/ Atomically calculate the exclusive OR of an image pixel value with an input\n".
+	\							"\/\/ value. The result is written to the image. The pixel's original value is\n".
+	\							"\/\/ returned.\n" .
+	\							"\/\/ param[in] image:  The image unit used for the operation.\n".
+	\							"\/\/ param[in] P:      The coordinate of the pixel used for the operation.\n".
+	\							"\/\/ param[in] sample: The sample in the image used for the operation.\n".
+	\							"\/\/ param[in] data:   The value to OR with the pixel data.\n".
+	\							"\/\/ returns   The original value of the image pixel.\n".
+	\							"uint imageAtomicXor(gimage1D        image, int   P,             uint data);\n".
+	\							"uint imageAtomicXor(gimage2D        image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicXor(gimage3D        image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicXor(gimage2DRect    image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicXor(gimageCube      image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicXor(gbufferImage    image, int   P,             uint data);\n".
+	\							"uint imageAtomicXor(gimage1DArray   image, ivec2 P,             uint data);\n".
+	\							"uint imageAtomicXor(gimage2DArray   image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicXor(gimageCubeArray image, ivec3 P,             uint data);\n".
+	\							"uint imageAtomicXor(gimage2DMS      image, ivec2 P, int sample, uint data);\n".
+	\							"uint imageAtomicXor(gimage2DMSArray image, ivec3 P, int sample, uint data);\n".
+	\							"int  imageAtomicXor(gimage1D        image, int   P,             int  data);\n".
+	\							"int  imageAtomicXor(gimage2D        image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicXor(gimage3D        image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicXor(gimage2DRect    image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicXor(gimageCube      image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicXor(gbufferImage    image, int   P,             int  data);\n".
+	\							"int  imageAtomicXor(gimage1DArray   image, ivec2 P,             int  data);\n".
+	\							"int  imageAtomicXor(gimage2DArray   image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicXor(gimageCubeArray image, ivec3 P,             int  data);\n".
+	\							"int  imageAtomicXor(gimage2DMS      image, ivec2 P, int sample, int  data);\n".
+	\							"int  imageAtomicXor(gimage2DMSArray image, ivec3 P, int sample, int  data);\n" },
 	\ { 'kind': 'f',	'word': 'imageLoad(',
 	\					'abbr': 'imageLoad',
-	\					'info': "\/\/ \n" .
-	\							"imageLoad();\n\n" },
+	\					'info': "\/\/ Get a pixel from an image.\n" .
+	\							"\/\/ param[in] image:  The image unit from which to load a pixel.\n".
+	\							"\/\/ param[in] P:      The coordinates for the image pixel to load.\n".
+	\							"\/\/ param[in] sample: The sample in the image to load.\n".
+	\							"gvec4 imageLoad(gimage1D        image, int   P);\n".
+	\							"gvec4 imageLoad(gimage2D        image, ivec2 P);\n".
+	\							"gvec4 imageLoad(gimage3D        image, ivec3 P);\n".
+	\							"gvec4 imageLoad(gimage2DRect    image, ivec2 P);\n".
+	\							"gvec4 imageLoad(gimageCube      image, ivec3 P);\n".
+	\							"gvec4 imageLoad(gbufferImage    image, int   P);\n".
+	\							"gvec4 imageLoad(gimage1DArray   image, ivec2 P);\n".
+	\							"gvec4 imageLoad(gimage2DArray   image, ivec3 P);\n".
+	\							"gvec4 imageLoad(gimageCubeArray image, ivec3 P);\n".
+	\							"gvec4 imageLoad(gimage2DMS      image, ivec2 P, int sample);\n".
+	\							"gvec4 imageLoad(gimage2DMSArray image, ivec3 P, int sample);\n\n" },
 	\ { 'kind': 'f',	'word': 'imageSamples(',
 	\					'abbr': 'imageSamples',
-	\					'info': "\/\/ \n" .
-	\							"imageSamples();\n\n" },
+	\					'info': "\/\/ Get the number of samples in an image.\n" .
+	\							"\/\/ param[in] image: The image to which the image data is bound.\n".
+	\							"\/\/ returns   The number of samples per pixel for the image.\n".
+	\							"int imageSamples(gimage2DMS      image);\n".
+	\							"int imageSamples(gimage2DMSArray image);\n\n" },
 	\ { 'kind': 'f',	'word': 'imageSize(',
 	\					'abbr': 'imageSize',
-	\					'info': "\/\/ \n" .
-	\							"imageSize();\n\n" },
+	\					'info': "\/\/ Get the dimensions of an image.\n" .
+	\							"\/\/ param[in] image: The image to which the image data is bound.\n".
+	\							"\/\/ returns   The width, height, depth, and layers of an image (in that order).\n".
+	\							"int   imageSize(gimage1D        image);\n".
+	\							"ivec2 imageSize(gimage2D        image);\n".
+	\							"ivec3 imageSize(gimage3D        image);\n".
+	\							"ivec2 imageSize(gimageCube      image);\n".
+	\							"ivec3 imageSize(gimageCubeArray image);\n".
+	\							"ivec2 imageSize(gimageRect      image);\n".
+	\							"ivec2 imageSize(gimage1DArray   image);\n".
+	\							"ivec3 imageSize(gimage2DArray   image);\n".
+	\							"int   imageSize(gimageBuffer    image);\n".
+	\							"ivec2 imageSize(gimage2DMS      image);\n".
+	\							"ivec3 imageSize(gimage2DMSArray image);\n\n" },
 	\ { 'kind': 'f',	'word': 'imageStore(',
 	\					'abbr': 'imageStore',
-	\					'info': "\/\/ \n" .
-	\							"imageStore();\n\n" },
+	\					'info': "\/\/ Write a pixel to an image.\n" .
+	\							"\/\/ param[in] image:  The image unit to which to write a pixel.\n".
+	\							"\/\/ param[in] P:      The coordinates for the image pixel to write.\n".
+	\							"\/\/ param[in] sample: The sample in the image to write.\n".
+	\							"\/\/ param[in] data:   The data to write to the image.\n".
+	\							"void imageStore(gimage1D        image, int   P,             gvec4 data);\n".
+	\							"void imageStore(gimage2D        image, ivec2 P,             gvec4 data);\n".
+	\							"void imageStore(gimage3D        image, ivec3 P,             gvec4 data);\n".
+	\							"void imageStore(gimage2DRect    image, ivec2 P,             gvec4 data);\n".
+	\							"void imageStore(gimageCube      image, ivec3 P,             gvec4 data);\n".
+	\							"void imageStore(gbufferImage    image, int   P,             gvec4 data);\n".
+	\							"void imageStore(gimage1DArray   image, ivec2 P,             gvec4 data);\n".
+	\							"void imageStore(gimage2DArray   image, ivec3 P,             gvec4 data);\n".
+	\							"void imageStore(gimageCubeArray image, ivec3 P,             gvec4 data);\n".
+	\							"void imageStore(gimage2DMS      iamge, ivec2 P, int sample, gvec4 data);\n".
+	\							"void imageStore(gimage2DMSArray image, ivec3 P, int sample, gvec4 data);\n\n" },
 	\ { 'kind': 'f',	'word': 'imulExtended(',
 	\					'abbr': 'imulExtended',
-	\					'info': "\/\/ \n" .
-	\							"imulExtended();\n\n" },
+	\					'info': "\/\/ Mulitply two 32 bit integers and generate a 64 bit result.\n" .
+	\							"\/\/ param[in]  x,y: The multiplication factors.\n".
+	\							"\/\/ param[out] msb: The most significant bits of the 64 bit result.\n".
+	\							"\/\/ param[out] lsb: The least significant bits of the 64 bit result.\n".
+	\							"void imulExtended(genIType x, genIType y, out genIType msb, out genIType lsb);\n\n" },
 	\ { 'kind': 'f',	'word': 'intBitsToFloat(',
 	\					'abbr': 'intBitsToFloat',
 	\					'info': "\/\/ Decode a floating point value from an integer. The result is undefined if x\n".
@@ -1046,16 +1379,37 @@ let s:glsl_builtins = [
 	\							"genType intBitsToFloat(genIType x);\n\n" },
 	\ { 'kind': 'f',	'word': 'interpolateAtCentroid(',
 	\					'abbr': 'interpolateAtCentroid',
-	\					'info': "\/\/ \n" .
-	\							"interpolateAtCentroid();\n\n" },
+	\					'info': "\/\/ Sample an input varying as if it were declared with the centroid qualifier.\n".
+	\							"\/\/ This function is only available in fragment shaders.\n".
+	\							"\/\/ param[in] interpolant: The value to sample.\n".
+	\							"\/\/ returns   The value of interpolant as if sampled via centroid.\n".
+	\							"float interpolateAtCentroid(float interpolant);\n".
+	\							"vec2  interpolateAtCentroid(vec2  interpolant);\n".
+	\							"vec3  interpolateAtCentroid(vec3  interpolant);\n".
+	\							"vec4  interpolateAtCentroid(vec4  interpolant);\n\n" },
 	\ { 'kind': 'f',	'word': 'interpolateAtOffset(',
 	\					'abbr': 'interpolateAtOffset',
-	\					'info': "\/\/ \n" .
-	\							"interpolateAtOffset();\n\n" },
+	\					'info': "\/\/ Sample an input varying at an offset from the pixel center. This function\n".
+	\							"\/\/ is only available in fragment shaders.\n" .
+	\							"\/\/ param[in] interpolant: The value to sample.\n".
+	\							"\/\/ param[in] offset:      The offset from the pixel center.\n".
+	\							"\/\/ returns:  The value of interpolant as if sampled at offset from the pixel\n".
+	\							"\/\/           center.\n".
+	\							"float interpolateAtOffset(float interpolant, vec2 offset);\n".
+	\							"vec2  interpolateAtOffset(vec2  interpolant, vec2 offset);\n".
+	\							"vec3  interpolateAtOffset(vec3  interpolant, vec2 offset);\n".
+	\							"vec4  interpolateAtOffset(vec4  interpolant, vec2 offset);\n\n" },
 	\ { 'kind': 'f',	'word': 'interpolateAtSample (',
 	\					'abbr': 'interpolateAtSample ',
-	\					'info': "\/\/ \n" .
-	\							"interpolateAtSample ();\n\n" },
+	\					'info': "\/\/ Sample an input varying at a specified sample location. This function is\n".
+	\							"\/\/ only available in fragment shaders.\n" .
+	\							"\/\/ param[in] interpolant: The value to sample.\n".
+	\							"\/\/ param[in] sample:      The index of the sample location.\n".
+	\							"\/\/ returns   The value of interpolant, sampled at the sample location.\n".
+	\							"float interpolateAtSample (float interpolant, int sample);\n".
+	\							"vec2  interpolateAtSample (vec2  interpolant, int sample);\n".
+	\							"vec3  interpolateAtSample (vec3  interpolant, int sample);\n".
+	\							"vec4  interpolateAtSample (vec4  interpolant, int sample);\n\n" },
 	\ { 'kind': 'f',	'word': 'inverse(',
 	\					'abbr': 'inverse',
 	\					'info': "\/\/ Calculate the inverse of a matrix. The result is undefined if m is singular\n" .
@@ -1137,16 +1491,14 @@ let s:glsl_builtins = [
 	\ { 'kind': 'f',	'word': 'matrixCompMult(',
 	\					'abbr': 'matrixCompMult',
 	\					'info': "\/\/ Multiply two matrices component-wise.\n" .
-	\							"\/\/ param[in] x: The first matrix factor.\n".
-	\							"\/\/ param[in] y: The second matrix fator.\n".
+	\							"\/\/ param[in] x,y: The matrix factors.\n".
 	\							"\/\/ returns   A matrix m, such that m[i] = x[i] * y[i].\n".
 	\							"dmat matrixCompMult(dmat x, dmat y);\n".
 	\							"mat  matrixCompMult(mat  x, mat  y);\n\n" },
 	\ { 'kind': 'f',	'word': 'max(',
 	\					'abbr': 'max',
 	\					'info': "\/\/ Calculate the maximum of two values.\n".
-	\							"\/\/ param[in] x: The first value to compare.\n".
-	\							"\/\/ param[in] y: The second value to compare.\n".
+	\							"\/\/ param[in] x,y: The two values to compare.\n".
 	\							"\/\/ returns   x > y ? x : y\n".
 	\							"genType  max(genType  x, genType  y);\n" .
 	\							"genType  max(genType  x, float    y);\n" .
@@ -1158,29 +1510,30 @@ let s:glsl_builtins = [
 	\							"genUType max(genUType x, uint     y);\n\n" },
 	\ { 'kind': 'f',	'word': 'memoryBarrier(',
 	\					'abbr': 'memoryBarrier',
-	\					'info': "\/\/ \n" .
-	\							"memoryBarrier();\n\n" },
+	\					'info': "\/\/ Wait until all memory accesses via image variables and atomic counters have\n".
+	\							"\/\/ completed.\n".
+	\							"void memoryBarrier();\n\n" },
 	\ { 'kind': 'f',	'word': 'memoryBarrierAtomicCounter(',
 	\					'abbr': 'memoryBarrierAtomicCounter',
-	\					'info': "\/\/ \n" .
-	\							"memoryBarrierAtomicCounter();\n\n" },
+	\					'info': "\/\/ Wait until all memory accesses via atomic counters have completed.\n".
+	\							"void memoryBarrierAtomicCounter();\n\n" },
 	\ { 'kind': 'f',	'word': 'memoryBarrierBuffer(',
 	\					'abbr': 'memoryBarrierBuffer',
-	\					'info': "\/\/ \n" .
-	\							"memoryBarrierBuffer();\n\n" },
+	\					'info': "\/\/ Wait until all memory accesses via buffer variables have completed.\n".
+	\							"void memoryBarrierBuffer();\n\n" },
 	\ { 'kind': 'f',	'word': 'memoryBarrierImage(',
 	\					'abbr': 'memoryBarrierImage',
-	\					'info': "\/\/ \n" .
-	\							"memoryBarrierImage();\n\n" },
+	\					'info': "\/\/ Wait until all memory accesses via image variables have completed.\n".
+	\							"void memoryBarrierImage();\n\n" },
 	\ { 'kind': 'f',	'word': 'memoryBarrierShared(',
 	\					'abbr': 'memoryBarrierShared',
-	\					'info': "\/\/ \n" .
-	\							"memoryBarrierShared();\n\n" },
+	\					'info': "\/\/ Wait until all memory accesses via shared variables have completed. This\n".
+	\							"\/\/ function is only available in compute shaders.\n".
+	\							"void memoryBarrierShared();\n\n" },
 	\ { 'kind': 'f',	'word': 'min(',
 	\					'abbr': 'min',
 	\					'info': "\/\/ Calculate the minimum of two values.\n".
-	\							"\/\/ param[in] x: The first value to compare.\n".
-	\							"\/\/ param[in] y: The second value to compare.\n".
+	\							"\/\/ param[in] x,y: The two values to compare.\n".
 	\							"\/\/ returns   x < y ? x : y\n".
 	\							"genType  min(genType  x, genType  y);\n" .
 	\							"genType  min(genType  x, float    y);\n" .
@@ -1193,9 +1546,8 @@ let s:glsl_builtins = [
 	\ { 'kind': 'f',	'word': 'mix(',
 	\					'abbr': 'mix',
 	\					'info': "\/\/ Linearly interpolate between x and y, by amount a.\n" .
-	\							"\/\/ param[in] x: The lower bound on the range of interpolation.\n".
-	\							"\/\/ param[in] y: The upper bound on the range of interpolation.\n".
-	\							"\/\/ param[in] a: The interpolation value between x and y.\n" .
+	\							"\/\/ param[in] x,y: The bounds on the range of interpolation.\n".
+	\							"\/\/ param[in] a:   The interpolation value between x and y.\n" .
 	\							"\/\/ returns   x(1-a) + ya\n" .
 	\							"genType  mix(genType  x, genType  y, genType  a);\n" .
 	\							"genType  mix(genType  x, genType  y, float    a);\n" .
@@ -1231,20 +1583,32 @@ let s:glsl_builtins = [
 	\							"genDType modf(genDType x, out genDType i);\n\n" },
 	\ { 'kind': 'f',	'word': 'noise1(',
 	\					'abbr': 'noise1',
-	\					'info': "\/\/ \n" .
-	\							"noise1();\n\n" },
+	\					'info': "\/\/ Generate a pseudo-random noise value. This function is only available in\n" .
+	\							"\/\/ fragment shaders.\n".
+	\							"\/\/ param[in] x: The noise function seed.\n".
+	\							"\/\/ returns:  A pseudo-random value on [-1.0, 1.0].\n".
+	\							"float noise1(genType x);\n\n" },
 	\ { 'kind': 'f',	'word': 'noise2(',
 	\					'abbr': 'noise2',
-	\					'info': "\/\/ \n" .
-	\							"noise2();\n\n" },
+	\					'info': "\/\/ Generate a pseudo-random noise value. This function is only available in\n" .
+	\							"\/\/ fragment shaders.\n".
+	\							"\/\/ param[in] x: The noise function seed.\n".
+	\							"\/\/ returns:  A pseudo-random value on [-1.0, 1.0].\n".
+	\							"vec2 noise2(genType x);\n\n" },
 	\ { 'kind': 'f',	'word': 'noise3(',
 	\					'abbr': 'noise3',
-	\					'info': "\/\/ \n" .
-	\							"noise3();\n\n" },
+	\					'info': "\/\/ Generate a pseudo-random noise value. This function is only available in\n" .
+	\							"\/\/ fragment shaders.\n".
+	\							"\/\/ param[in] x: The noise function seed.\n".
+	\							"\/\/ returns:  A pseudo-random value on [-1.0, 1.0].\n".
+	\							"vec3 noise3(genType x);\n\n" },
 	\ { 'kind': 'f',	'word': 'noise4(',
 	\					'abbr': 'noise4',
-	\					'info': "\/\/ \n" .
-	\							"noise4();\n\n" },
+	\					'info': "\/\/ Generate a pseudo-random noise value. This function is only available in\n" .
+	\							"\/\/ fragment shaders.\n".
+	\							"\/\/ param[in] x: The noise function seed.\n".
+	\							"\/\/ returns:  A pseudo-random value on [-1.0, 1.0].\n".
+	\							"vec4 noise4(genType x);\n\n" },
 	\ { 'kind': 'f',	'word': 'normalize(',
 	\					'abbr': 'normalize',
 	\					'info': "\/\/ Normalize a vector. The returned vector has the same direction as v, but\n" .
@@ -1413,9 +1777,8 @@ let s:glsl_builtins = [
 	\							"\/\/     genType t = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);\n" .
 	\							"\/\/     return t * t * (3.0 - 2.0 * t);\n" .
 	\							"\/\/ The result is undefined if edge0 >= edge1.\n" .
-	\							"\/\/ param[in] edge0: The lower bound of the interpolation range.\n".
-	\							"\/\/ param[in] edge1: The upper bound of the interpolation range.\n".
-	\							"\/\/ param[in] x:     The interpolation's source value.\n".
+	\							"\/\/ param[in] edge0,edge1: The bounds of the interpolation range.\n".
+	\							"\/\/ param[in] x:           The interpolation's source value.\n".
 	\							"\/\/ returns   The value of the equations noted above.\n".
 	\							"genType  smoothstep(genType  edge0, genType  edge1, genType  x);\n" .
 	\							"genType  smoothstep(float    edge0, float    edge1, genType  x);\n" .
@@ -1560,8 +1923,29 @@ let s:glsl_builtins = [
 	\							"int textureSamples(gsampler2DMSArray sampler);\n\n" },
 	\ { 'kind': 'f',	'word': 'textureSize(',
 	\					'abbr': 'textureSize',
-	\					'info': "\/\/ \n" .
-	\							"textureSize();\n\n" },
+	\					'info': "\/\/ Get the dimensions of a texture.\n" .
+	\							"\/\/ param[in] sampler: The sample of the bound texture.\n".
+	\							"\/\/ param[in] lod:     The level of detail for which to get the texture size.\n".
+	\							"\/\/ returns:  The width, height, and depth of the texture. For array textures,\n".
+	\							"\/\/           the width, height, and layers are returned.\n".
+	\							"int   textureSize(gsampler1D             sampler, int lod);\n".
+	\							"ivec2 textureSize(gsampler2D             sampler, int lod);\n".
+	\							"ivec3 textureSize(gsampler3D             sampler, int lod);\n".
+	\							"ivec2 textureSize(gsamplerCube           sampler, int lod);\n".
+	\							"int   textureSize(sampler1DShadow        sampler, int lod);\n".
+	\							"ivec2 textureSize(sample2DShadow         sampler, int lod);\n".
+	\							"ivec2 textureSize(samplerCubeShadow      sampler, int lod);\n".
+	\							"ivec3 textureSize(samplerCubeArray       sampler, int lod);\n".
+	\							"ivec3 textureSize(samplerCubeArrayShadow sampler, int lod);\n".
+	\							"ivec2 textureSize(gsamplerRect           sampler         );\n".
+	\							"ivec2 textureSize(gsamplerRectShadow     sampler         );\n".
+	\							"ivec2 textureSize(gsampler1DArray        sampler, int lod);\n".
+	\							"ivec3 textureSize(gsampler2DArray        sampler, int lod);\n".
+	\							"ivec2 textureSize(sampler1DArrayShadow   sampler, int lod);\n".
+	\							"ivec3 textureSize(sampler2DArrayShadow   sampler, int lod);\n".
+	\							"int   textureSize(gsamplerBuffer         sampler         );\n".
+	\							"ivec2 textureSize(gsampler2DMS           sampler         );\n".
+	\							"ivec3 textureSize(gsampler2DMSArray      sampler         );\n\n" },
 	\ { 'kind': 'f',	'word': 'transpose(',
 	\					'abbr': 'transpose',
 	\					'info': "\/\/ Calculate the transpose of a matrix.\n" .
@@ -1594,8 +1978,12 @@ let s:glsl_builtins = [
 	\							"genDType trunc(genDType x);\n\n" },
 	\ { 'kind': 'f',	'word': 'uaddCarry(',
 	\					'abbr': 'uaddCarry',
-	\					'info': "\/\/ \n" .
-	\							"uaddCarry();\n\n" },
+	\					'info': "\/\/ Add two unsigned integers, returning any carry value.\n" .
+	\							"\/\/ param[in]  x,y:   The two values to add.\n".
+	\							"\/\/ param[out] carry: Any carry value generated by the addition. This is 0 if\n".
+	\							"\/\/                   x + y < 2^32. Otherwise, it is set to 1.\n".
+	\							"\/\/ returns    (x + y) % (2^32)\n".
+	\							"genUType uaddCarry(genUType x, genUType y, out genUType carry);\n\n" },
 	\ { 'kind': 'f',	'word': 'uintBitsToFloat(',
 	\					'abbr': 'uintBitsToFloat',
 	\					'info': "\/\/ Decode a floating point value from an unsigned integer. The result is\n".
@@ -1606,8 +1994,11 @@ let s:glsl_builtins = [
 	\							"genType uintBitsToFloat(genUType x);\n\n" },
 	\ { 'kind': 'f',	'word': 'umulExtended(',
 	\					'abbr': 'umulExtended',
-	\					'info': "\/\/ \n" .
-	\							"umulExtended();\n\n" },
+	\					'info': "\/\/ Mulitply two 32 bit integers and generate a 64 bit result.\n" .
+	\							"\/\/ param[in]  x,y: The multiplication factors.\n".
+	\							"\/\/ param[out] msb: The most significant bits of the 64 bit result.\n".
+	\							"\/\/ param[out] lsb: The least significant bits of the 64 bit result.\n".
+	\							"void umulExtended(genUType x, genUType y, out genUType msb, out genUType lsb);\n\n" },
 	\ { 'kind': 'f',	'word': 'unpackDouble2x32(',
 	\					'abbr': 'unpackDouble2x32',
 	\					'info': "\/\/ Unpack 2 unsigned integers from a double precision value. The first\n".
@@ -1661,8 +2052,13 @@ let s:glsl_builtins = [
 	\							"vec4 unpackUnorm4x8(uint p);\n\n" },
 	\ { 'kind': 'f',	'word': 'usubBorrow(',
 	\					'abbr': 'usubBorrow',
-	\					'info': "\/\/ \n" .
-	\							"usubBorrow();\n\n" },
+	\					'info': "\/\/ Subtract two unsigned integers, and output any borrowing value.\n" .
+	\							"\/\/ param[in]  x,y:    The subtraction operations.\n".
+	\							"\/\/ param[out] borrow: Any borrowing value generated by the subtraction. If\n".
+	\							"\/\/                    y <= x, borrow is set to 0. Otherwise it is set to 1.\n".
+	\							"\/\/ returns    if (y <= 0) x - y\n".
+	\							"\/\/            else        (2^32) + x - y\n".
+	\							"genUType usubBorrow(genUType x, genUType y, out genUType borrow);\n\n" },
 	\ { 'kind': 'f',	'word': 'contained(',
 	\					'abbr': 'contained',
 	\					'info': "\/\/ \n" .
